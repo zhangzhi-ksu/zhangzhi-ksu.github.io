@@ -1,0 +1,675 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>Table of contents</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<div id="toc">
+<a href="CpdtTactics.html"><h2>CpdtTactics</h2></a>
+<a href="LibTactics.html"><h2>LibTactics</h2></a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab1">Additional notations for Coq</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab2">N-ary Existentials</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab3">Tools for programming with Ltac</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab4">Identity continuation</a>
+
+</li>
+<li><a href="LibTactics.html#lab5">Untyped arguments for tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab6">Optional arguments for tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab7">Wildcard arguments for tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab8">Position markers</a>
+
+</li>
+<li><a href="LibTactics.html#lab9">List of arguments for tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab10">Databases of lemmas</a>
+
+</li>
+<li><a href="LibTactics.html#lab11">On-the-fly removal of hypotheses</a>
+
+</li>
+<li><a href="LibTactics.html#lab12">Numbers as arguments</a>
+
+</li>
+<li><a href="LibTactics.html#lab13">Testing tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab14">Check no evar in goal</a>
+
+</li>
+<li><a href="LibTactics.html#lab15">Helper function for introducing evars</a>
+
+</li>
+<li><a href="LibTactics.html#lab16">Tagging of hypotheses</a>
+
+</li>
+<li><a href="LibTactics.html#lab17">Tagging of hypotheses</a>
+
+</li>
+<li><a href="LibTactics.html#lab18">Deconstructing terms</a>
+
+</li>
+<li><a href="LibTactics.html#lab19">Action at occurence and action not at occurence</a>
+
+</li>
+<li><a href="LibTactics.html#lab20">An alias for <span class="inlinecode"><span class="id" type="var">eq</span></span></a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab21">Common tactics for simplifying goals like <span class="inlinecode"><span class="id" type="tactic">intuition</span></span></a>
+
+</li>
+<li><a href="LibTactics.html#lab22">Backward and forward chaining</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab23">Application</a>
+
+</li>
+<li><a href="LibTactics.html#lab24">Assertions</a>
+
+</li>
+<li><a href="LibTactics.html#lab25">Instantiation and forward-chaining</a>
+
+</li>
+<li><a href="LibTactics.html#lab26">Experimental tactics for application</a>
+
+</li>
+<li><a href="LibTactics.html#lab27">Adding assumptions</a>
+
+</li>
+<li><a href="LibTactics.html#lab28">Application of tautologies</a>
+
+</li>
+<li><a href="LibTactics.html#lab29">Application modulo equalities</a>
+
+</li>
+<li><a href="LibTactics.html#lab30">Absurd goals</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab31">Introduction and generalization</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab32">Introduction</a>
+
+</li>
+<li><a href="LibTactics.html#lab33">Generalization</a>
+
+</li>
+<li><a href="LibTactics.html#lab34">Naming</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab35">Rewriting</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab36">Replace</a>
+
+</li>
+<li><a href="LibTactics.html#lab37">Renaming</a>
+
+</li>
+<li><a href="LibTactics.html#lab38">Unfolding</a>
+
+</li>
+<li><a href="LibTactics.html#lab39">Simplification</a>
+
+</li>
+<li><a href="LibTactics.html#lab40">Evaluation</a>
+
+</li>
+<li><a href="LibTactics.html#lab41">Substitution</a>
+
+</li>
+<li><a href="LibTactics.html#lab42">Tactics to work with proof irrelevance</a>
+
+</li>
+<li><a href="LibTactics.html#lab43">Proving equalities</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab44">Inversion</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab45">Basic inversion</a>
+
+</li>
+<li><a href="LibTactics.html#lab46">Inversion with substitution</a>
+
+</li>
+<li><a href="LibTactics.html#lab47">Injection with substitution</a>
+
+</li>
+<li><a href="LibTactics.html#lab48">Inversion and injection with substitution --rough implementation</a>
+
+</li>
+<li><a href="LibTactics.html#lab49">Case analysis</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab50">Induction</a>
+
+</li>
+<li><a href="LibTactics.html#lab51">Coinduction</a>
+
+</li>
+<li><a href="LibTactics.html#lab52">Decidable equality</a>
+
+</li>
+<li><a href="LibTactics.html#lab53">Equivalence</a>
+
+</li>
+<li><a href="LibTactics.html#lab54">N-ary Conjunctions and Disjunctions</a>
+
+</li>
+<li><a href="LibTactics.html#lab55">Tactics to prove typeclass instances</a>
+
+</li>
+<li><a href="LibTactics.html#lab56">Tactics to invoke automation</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab57"><span class="inlinecode"><span class="id" type="var">hint</span></span> to add hints local to a lemma</a>
+
+</li>
+<li><a href="LibTactics.html#lab58"><span class="inlinecode"><span class="id" type="var">jauto</span></span>, a new automation tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab59">Definitions of automation tactics</a>
+
+</li>
+<li><a href="LibTactics.html#lab60">Definitions for parsing compatibility</a>
+
+</li>
+<li><a href="LibTactics.html#lab61">Parsing for light automation</a>
+
+</li>
+<li><a href="LibTactics.html#lab62">Parsing for strong automation</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab63">Tactics to sort out the proof context</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab64">Hiding hypotheses</a>
+
+</li>
+<li><a href="LibTactics.html#lab65">Sorting hypotheses</a>
+
+</li>
+<li><a href="LibTactics.html#lab66">Clearing hypotheses</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab67">Tactics for development purposes</a>
+<ul class="doclist">
+<li><a href="LibTactics.html#lab68">Skipping subgoals</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="LibTactics.html#lab69">Compatibility with standard library</a>
+
+</li>
+</ul>
+<a href="more_list.html"><h2>more_list</h2></a>
+<ul class="doclist">
+<li><a href="more_list.html#lab70">List Split Operations</a>
+
+</li>
+<li><a href="more_list.html#lab71">List Split Lemmas</a>
+
+</li>
+</ul>
+<a href="language_basics.html"><h2>language_basics</h2></a>
+<ul class="doclist">
+<li><a href="language_basics.html#lab72">Identifiers</a>
+
+</li>
+<li><a href="language_basics.html#lab73">Data Types</a>
+
+</li>
+<li><a href="language_basics.html#lab74">In/Out Mode</a>
+
+</li>
+<li><a href="language_basics.html#lab75">Operators</a>
+
+</li>
+<li><a href="language_basics.html#lab76">Literals</a>
+
+</li>
+<li><a href="language_basics.html#lab77">Auxiliary Functions</a>
+
+</li>
+</ul>
+<a href="language.html"><h2>language</h2></a>
+<ul class="doclist">
+<li><a href="language.html#lab78">SPARK Subset Language</a>
+<ul class="doclist">
+<li><a href="language.html#lab79">Expressions</a>
+
+</li>
+<li><a href="language.html#lab80">Statements</a>
+
+</li>
+<li><a href="language.html#lab81">Type Declarations</a>
+
+</li>
+<li><a href="language.html#lab82">Declarations</a>
+
+</li>
+<li><a href="language.html#lab83">Auxiliary Functions</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<a href="language_flagged.html"><h2>language_flagged</h2></a>
+<ul class="doclist">
+<li><a href="language_flagged.html#lab84">SPARK Subset Language</a>
+<ul class="doclist">
+<li><a href="language_flagged.html#lab85">Expressions</a>
+
+</li>
+<li><a href="language_flagged.html#lab86">Statements</a>
+
+</li>
+<li><a href="language_flagged.html#lab87">Type Declarations</a>
+
+</li>
+<li><a href="language_flagged.html#lab88">Declarations</a>
+
+</li>
+<li><a href="language_flagged.html#lab89">Auxiliary Functions</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<a href="language_util.html"><h2>language_util</h2></a>
+<ul class="doclist">
+<li><a href="language_util.html#lab90">Auxiliary Functions For Language</a>
+
+</li>
+<li><a href="language_util.html#lab91">Auxiliary Functions For Language_Flagged</a>
+
+</li>
+</ul>
+<a href="checks.html"><h2>checks</h2></a>
+<ul class="doclist">
+<li><a href="checks.html#lab92">Run-Time Checks</a>
+
+</li>
+<li><a href="checks.html#lab93">Check Flags Comparison Functions</a>
+
+</li>
+</ul>
+<a href="checks_generator.html"><h2>checks_generator</h2></a>
+<ul class="doclist">
+<li><a href="checks_generator.html#lab94">Compile To Check-Flagged Program</a>
+
+</li>
+<li><a href="checks_generator.html#lab95">Functions for Inserting Run-Time Checks</a>
+
+</li>
+<li><a href="checks_generator.html#lab96">Semantics Equivalence Proof For Run-Time Checks Generation</a>
+
+</li>
+<li><a href="checks_generator.html#lab97">Lemmas</a>
+
+</li>
+<li><a href="checks_generator.html#lab98">Compile To Flagged Symbol Table</a>
+<ul class="doclist">
+<li><a href="checks_generator.html#lab99">Lemmas</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<a href="checks_comparison.html"><h2>checks_comparison</h2></a>
+<ul class="doclist">
+<li><a href="checks_comparison.html#lab100">Check Flags Comparison Function For Program</a>
+<ul class="doclist">
+<li><a href="checks_comparison.html#lab101">Check Flags Comparison Function For Expression</a>
+
+</li>
+<li><a href="checks_comparison.html#lab102">Check Flags Comparison Function For Name</a>
+
+</li>
+<li><a href="checks_comparison.html#lab103">Check Flags Comparison Function For Statement</a>
+
+</li>
+<li><a href="checks_comparison.html#lab104">Check Flags Comparison Function For Declaration</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="checks_comparison.html#lab105">Map Back to SPARK Source Code</a>
+
+</li>
+</ul>
+<a href="values.html"><h2>values</h2></a>
+<ul class="doclist">
+<li><a href="values.html#lab106">Run Time Error Types</a>
+
+</li>
+<li><a href="values.html#lab107">Return Values / States</a>
+
+</li>
+<li><a href="values.html#lab108">Stored Values</a>
+
+</li>
+<li><a href="values.html#lab109">value types for run time checks optimization</a>
+
+</li>
+<li><a href="values.html#lab110">Value Operations</a>
+<ul class="doclist">
+<li><a href="values.html#lab111">Arithmetic Operations</a>
+
+</li>
+<li><a href="values.html#lab112">Logic Operations</a>
+
+</li>
+<li><a href="values.html#lab113">Relational Operations</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="values.html#lab114">Binary Operations</a>
+
+</li>
+<li><a href="values.html#lab115">Unary Operations</a>
+
+</li>
+</ul>
+<a href="environment.html"><h2>environment</h2></a>
+<ul class="doclist">
+<li><a href="environment.html#lab116">Store</a>
+<ul class="doclist">
+<li><a href="environment.html#lab117">Store Operations</a>
+
+</li>
+<li><a href="environment.html#lab118">Lemmas About Store Operations</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="environment.html#lab119">Stack</a>
+<ul class="doclist">
+<li><a href="environment.html#lab120">Stack Operations</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<a href="symboltable_module.html"><h2>symboltable_module</h2></a>
+<ul class="doclist">
+<li><a href="symboltable_module.html#lab121">Symbol Table Elements</a>
+
+</li>
+<li><a href="symboltable_module.html#lab122">Symbol Table Module</a>
+<ul class="doclist">
+<li><a href="symboltable_module.html#lab123">Symbol Table Structure</a>
+
+</li>
+<li><a href="symboltable_module.html#lab124">Name Table Operations</a>
+
+</li>
+<li><a href="symboltable_module.html#lab125">Symbol Table Operations</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<a href="symboltable.html"><h2>symboltable</h2></a>
+<ul class="doclist">
+<li><a href="symboltable.html#lab126">Symbol Tables</a>
+
+</li>
+<li><a href="symboltable.html#lab127">Help Lemmas</a>
+
+</li>
+</ul>
+<a href="semantics.html"><h2>semantics</h2></a>
+<ul class="doclist">
+<li><a href="semantics.html#lab128">Run Time Check Semantics</a>
+
+</li>
+<li><a href="semantics.html#lab129">Relational Semantics</a>
+<ul class="doclist">
+<li><a href="semantics.html#lab130">Expression Evaluation Semantics</a>
+
+</li>
+<li><a href="semantics.html#lab131">Declaration Evaluation Semantics</a>
+
+</li>
+<li><a href="semantics.html#lab132">Statement Evaluation Semantics</a>
+<ul class="doclist">
+<li><a href="semantics.html#lab133">Copy In</a>
+
+</li>
+<li><a href="semantics.html#lab134">Copy Out</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+<a href="semantics_flagged.html"><h2>semantics_flagged</h2></a>
+<ul class="doclist">
+<li><a href="semantics_flagged.html#lab135">Do Flagged Checks</a>
+
+</li>
+<li><a href="semantics_flagged.html#lab136">Relational Semantics</a>
+<ul class="doclist">
+<li><a href="semantics_flagged.html#lab137">Expression Evaluation Semantics</a>
+
+</li>
+<li><a href="semantics_flagged.html#lab138">Declaration Evaluation Semantics</a>
+
+</li>
+<li><a href="semantics_flagged.html#lab139">Statement Evaluation Semantics</a>
+<ul class="doclist">
+<li><a href="semantics_flagged.html#lab140">Copy In</a>
+
+</li>
+<li><a href="semantics_flagged.html#lab141">Copy Out</a>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li><a href="semantics_flagged.html#lab142">Help Lemmas</a>
+
+</li>
+</ul>
+<a href="checks_soundness.html"><h2>checks_soundness</h2></a>
+<ul class="doclist">
+<li><a href="checks_soundness.html#lab143">Soundness Proof of Expression</a>
+
+</li>
+<li><a href="checks_soundness.html#lab144">Soundness Proof of Statement</a>
+
+</li>
+</ul>
+<a href="checks_optimization.html"><h2>checks_optimization</h2></a>
+<ul class="doclist">
+<li><a href="checks_optimization.html#lab145">Run-Time Checks Optimization For Expression</a>
+
+</li>
+<li><a href="checks_optimization.html#lab146">Run-Time Checks Optimization For Statement</a>
+
+</li>
+<li><a href="checks_optimization.html#lab147">Run-Time Checks Optimization For Declaration</a>
+
+</li>
+</ul>
+<a href="checks_optimization_util.html"><h2>checks_optimization_util</h2></a>
+<ul class="doclist">
+<li><a href="checks_optimization_util.html#lab148">ZArith Help Lemmas</a>
+
+</li>
+<li><a href="checks_optimization_util.html#lab149">Checks Optimization for Literal</a>
+
+</li>
+<li><a href="checks_optimization_util.html#lab150">optimize_exp_ex_cks_stripped</a>
+
+</li>
+</ul>
+<a href="well_typed.html"><h2>well_typed</h2></a>
+<ul class="doclist">
+<li><a href="well_typed.html#lab151">Helper Functions</a>
+<ul class="doclist">
+<li><a href="well_typed.html#lab152">the type of the expression</a>
+
+</li>
+</ul>
+
+</li>
+<li><a href="well_typed.html#lab153">Well-Typed Expression</a>
+
+</li>
+<li><a href="well_typed.html#lab154">Well-Typed Statement</a>
+
+</li>
+<li><a href="well_typed.html#lab155">Well-Typed Declaration</a>
+
+</li>
+<li><a href="well_typed.html#lab156">well typed symbol table</a>
+
+</li>
+<li><a href="well_typed.html#lab157">Well-Typed Value</a>
+
+</li>
+<li><a href="well_typed.html#lab158">Well-Typed Store</a>
+
+</li>
+<li><a href="well_typed.html#lab159">Well-Typed Stack</a>
+
+</li>
+<li><a href="well_typed.html#lab160">Well-Typed Stack and Symbol Table</a>
+
+</li>
+</ul>
+<a href="well_typed_util.html"><h2>well_typed_util</h2></a>
+<ul class="doclist">
+<li><a href="well_typed_util.html#lab161">Helper Lemmas</a>
+
+</li>
+<li><a href="well_typed_util.html#lab162">well-typed store and stack lemmas</a>
+
+</li>
+<li><a href="well_typed_util.html#lab163">storeUpdate_preserve_typed_stack</a>
+
+</li>
+<li><a href="well_typed_util.html#lab164">Eval Exp_or_Name Value Well Typed</a>
+
+</li>
+<li><a href="well_typed_util.html#lab165">Typed Value in Bound</a>
+
+</li>
+<li><a href="well_typed_util.html#lab166">copy_in_preserve_typed_store</a>
+
+</li>
+<li><a href="well_typed_util.html#lab167">copy_out_preserve_typed_stack</a>
+
+</li>
+<li><a href="well_typed_util.html#lab168">eval_declaration_preserve_typed_stack</a>
+
+</li>
+<li><a href="well_typed_util.html#lab169">cut_until_preserve_typed_stack</a>
+
+</li>
+<li><a href="well_typed_util.html#lab170">eval_statement_preserve_typed_stack</a>
+
+</li>
+</ul>
+<a href="checks_optimization_soundness_util.html"><h2>checks_optimization_soundness_util</h2></a>
+<ul class="doclist">
+<li><a href="checks_optimization_soundness_util.html#lab171">Eval Exp_or_Name Value In Bound</a>
+
+</li>
+<li><a href="checks_optimization_soundness_util.html#lab172">expression_checks_optimization_soundness</a>
+
+</li>
+<li><a href="checks_optimization_soundness_util.html#lab173">name_checks_optimization_soundness</a>
+
+</li>
+<li><a href="checks_optimization_soundness_util.html#lab174">store_update_optimization_soundness</a>
+
+</li>
+<li><a href="checks_optimization_soundness_util.html#lab175">copy_in_args_checks_optimization_soundness</a>
+
+</li>
+<li><a href="checks_optimization_soundness_util.html#lab176">util version with well_typed_value_in_stack and well_typed_value_in_store</a>
+
+</li>
+</ul>
+<a href="checks_optimization_soundness_typed.html"><h2>checks_optimization_soundness_typed</h2></a>
+<ul class="doclist">
+<li><a href="checks_optimization_soundness_typed.html#lab177">copy_out_args_checks_optimization_soundness</a>
+
+</li>
+<li><a href="checks_optimization_soundness_typed.html#lab178">statement_checks_optimization_soundness</a>
+
+</li>
+<li><a href="checks_optimization_soundness_typed.html#lab179">declaration_checks_optimization_soundness2</a>
+
+</li>
+</ul>
+</div>
+<hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

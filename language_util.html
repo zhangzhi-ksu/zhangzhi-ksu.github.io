@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>language_util</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">language_util</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="language_flagged.html#"><span class="id" type="library">language_flagged</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab90"></a><h1 class="section">Auxiliary Functions For Language</h1>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Section</span> <a name="AuxiliaryFunctions_For_Language"><span class="id" type="section">AuxiliaryFunctions_For_Language</span></a>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <a class="idref" href="language_util.html#AuxiliaryFunctions_For_Language"><span class="id" type="section">AuxiliaryFunctions_For_Language</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab91"></a><h1 class="section">Auxiliary Functions For Language_Flagged</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Section</span> <a name="AuxiliaryFunctions_For_Language_Flagged"><span class="id" type="section">AuxiliaryFunctions_For_Language_Flagged</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Check Flags Extraction Functions 
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">name_exterior_checks</span> (<span class="id" type="var">n</span>: <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a>): <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Identifier_X"><span class="id" type="constructor">E_Identifier_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">ex_cks</span> =&gt; <span class="id" type="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Indexed_Component_X"><span class="id" type="constructor">E_Indexed_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">e</span> <span class="id" type="var">ex_cks</span> =&gt; <span class="id" type="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Selected_Component_X"><span class="id" type="constructor">E_Selected_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">f</span> <span class="id" type="var">ex_cks</span> =&gt; <span class="id" type="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">exp_exterior_checks</span> (<span class="id" type="var">e</span>: <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a>): <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Literal_X"><span class="id" type="constructor">E_Literal_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">l</span> <span class="id" type="var">in_cks</span> <span class="id" type="var">ex_cks</span> =&gt; <span class="id" type="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Name_X"><span class="id" type="constructor">E_Name_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">n</span> =&gt; <a class="idref" href="language_util.html#name_exterior_checks"><span class="id" type="definition">name_exterior_checks</span></a> <span class="id" type="var">n</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Binary_Operation_X"><span class="id" type="constructor">E_Binary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">op</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">in_cks</span> <span class="id" type="var">ex_cks</span> =&gt; <span class="id" type="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Unary_Operation_X"><span class="id" type="constructor">E_Unary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">op</span> <span class="id" type="var">e</span> <span class="id" type="var">in_cks</span> <span class="id" type="var">ex_cks</span> =&gt; <span class="id" type="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="update_exterior_checks_name"><span class="id" type="definition">update_exterior_checks_name</span></a> <span class="id" type="var">n</span> <span class="id" type="var">checks</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Identifier_X"><span class="id" type="constructor">E_Identifier_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">ex_checks</span> =&gt; <a class="idref" href="language_flagged.html#E_Identifier_X"><span class="id" type="constructor">E_Identifier_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Indexed_Component_X"><span class="id" type="constructor">E_Indexed_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">e</span> <span class="id" type="var">ex_checks</span> =&gt; <a class="idref" href="language_flagged.html#E_Indexed_Component_X"><span class="id" type="constructor">E_Indexed_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">e</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Selected_Component_X"><span class="id" type="constructor">E_Selected_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">f</span> <span class="id" type="var">ex_checks</span> =&gt; <a class="idref" href="language_flagged.html#E_Selected_Component_X"><span class="id" type="constructor">E_Selected_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">f</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="update_exterior_checks_exp"><span class="id" type="definition">update_exterior_checks_exp</span></a> <span class="id" type="var">e</span> <span class="id" type="var">checks</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Literal_X"><span class="id" type="constructor">E_Literal_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">l</span> <span class="id" type="var">in_checks</span> <span class="id" type="var">ex_checks</span> =&gt; <a class="idref" href="language_flagged.html#E_Literal_X"><span class="id" type="constructor">E_Literal_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">l</span> <span class="id" type="var">in_checks</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Name_X"><span class="id" type="constructor">E_Name_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">n</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">let</span> <span class="id" type="var">n'</span> := <a class="idref" href="language_util.html#update_exterior_checks_name"><span class="id" type="definition">update_exterior_checks_name</span></a> <span class="id" type="var">n</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a> <span class="id" type="keyword">in</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_flagged.html#E_Name_X"><span class="id" type="constructor">E_Name_X</span></a> <span class="id" type="var">ast_num</span> <a class="idref" href="language_util.html#n'"><span class="id" type="variable">n'</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Binary_Operation_X"><span class="id" type="constructor">E_Binary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">bop</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">in_checks</span> <span class="id" type="var">ex_checks</span> =&gt; <a class="idref" href="language_flagged.html#E_Binary_Operation_X"><span class="id" type="constructor">E_Binary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">bop</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">in_checks</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Unary_Operation_X"><span class="id" type="constructor">E_Unary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">uop</span> <span class="id" type="var">e</span> <span class="id" type="var">in_checks</span> <span class="id" type="var">ex_checks</span> =&gt; <a class="idref" href="language_flagged.html#E_Unary_Operation_X"><span class="id" type="constructor">E_Unary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">uop</span> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a> <span class="id" type="var">in_checks</span> <a class="idref" href="language_util.html#checks"><span class="id" type="variable">checks</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="exp_updated_exterior_checks"><span class="id" type="lemma">exp_updated_exterior_checks</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">e</span> <span class="id" type="var">cks</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_util.html#exp_exterior_checks"><span class="id" type="definition">exp_exterior_checks</span></a> (<a class="idref" href="language_util.html#update_exterior_checks_exp"><span class="id" type="definition">update_exterior_checks_exp</span></a> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a> <a class="idref" href="language_util.html#cks"><span class="id" type="variable">cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="language_util.html#cks"><span class="id" type="variable">cks</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>; <span class="id" type="tactic">destruct</span> <span class="id" type="var">e</span>; <span class="id" type="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">n</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="name_updated_exterior_checks"><span class="id" type="lemma">name_updated_exterior_checks</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">n</span> <span class="id" type="var">cks</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_util.html#name_exterior_checks"><span class="id" type="definition">name_exterior_checks</span></a> (<a class="idref" href="language_util.html#update_exterior_checks_name"><span class="id" type="definition">update_exterior_checks_name</span></a> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="language_util.html#cks"><span class="id" type="variable">cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="language_util.html#cks"><span class="id" type="variable">cks</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>; <span class="id" type="tactic">destruct</span> <span class="id" type="var">n</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="exp_exterior_checks_refl"><span class="id" type="lemma">exp_exterior_checks_refl</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">e</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_util.html#update_exterior_checks_exp"><span class="id" type="definition">update_exterior_checks_exp</span></a> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a> (<a class="idref" href="language_util.html#exp_exterior_checks"><span class="id" type="definition">exp_exterior_checks</span></a> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">e</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">n</span>; <span class="id" type="tactic">simpl</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="name_exterior_checks_refl"><span class="id" type="lemma">name_exterior_checks_refl</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">n</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_util.html#update_exterior_checks_name"><span class="id" type="definition">update_exterior_checks_name</span></a> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a> (<a class="idref" href="language_util.html#name_exterior_checks"><span class="id" type="definition">name_exterior_checks</span></a> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">n</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="update_exterior_checks_exp_astnum_eq"><span class="id" type="lemma">update_exterior_checks_exp_astnum_eq</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">e</span> <span class="id" type="var">cks</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_flagged.html#expression_astnum_x"><span class="id" type="definition">expression_astnum_x</span></a> (<a class="idref" href="language_util.html#update_exterior_checks_exp"><span class="id" type="definition">update_exterior_checks_exp</span></a> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a> <a class="idref" href="language_util.html#cks"><span class="id" type="variable">cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="language_flagged.html#expression_astnum_x"><span class="id" type="definition">expression_astnum_x</span></a> <a class="idref" href="language_util.html#e"><span class="id" type="variable">e</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">e</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="update_exterior_checks_name_astnum_eq"><span class="id" type="lemma">update_exterior_checks_name_astnum_eq</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">n</span> <span class="id" type="var">cks</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_flagged.html#name_astnum_x"><span class="id" type="definition">name_astnum_x</span></a> (<a class="idref" href="language_util.html#update_exterior_checks_name"><span class="id" type="definition">update_exterior_checks_name</span></a> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a> <a class="idref" href="language_util.html#cks"><span class="id" type="variable">cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="language_flagged.html#name_astnum_x"><span class="id" type="definition">name_astnum_x</span></a> <a class="idref" href="language_util.html#n"><span class="id" type="variable">n</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">destruct</span> <span class="id" type="var">n</span>; <span class="id" type="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <a class="idref" href="language_util.html#AuxiliaryFunctions_For_Language_Flagged"><span class="id" type="section">AuxiliaryFunctions_For_Language_Flagged</span></a>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

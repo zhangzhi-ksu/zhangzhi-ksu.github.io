@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>values</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">values</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="language_basics.html#"><span class="id" type="library">language_basics</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab106"></a><h1 class="section">Run Time Error Types</h1>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="error_type"><span class="id" type="inductive">error_type</span></a>: <span class="id" type="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="RTE_Division_By_Zero"><span class="id" type="constructor">RTE_Division_By_Zero</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="RTE_Overflow"><span class="id" type="constructor">RTE_Overflow</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="RTE_Range"><span class="id" type="constructor">RTE_Range</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab107"></a><h1 class="section">Return Values / States</h1>
+ Statement and expression evaluation returns one of the following results:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> normal result;
+
+</li>
+<li> run-time errors, which are required to be detected at run time,
+      for example, overflow check and division by zero check;
+
+</li>
+<li> unterminated state caused by infinite loop (only for functional semantics);
+
+</li>
+<li> abnormal state, which includes compile time errors
+      (for example, type checks failure and undefined variables), 
+      bounded errors and erroneous execution. 
+      In the future, the abnormal state can be refined into these 
+      more precise categories (1.1.5);
+
+</li>
+</ul>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Inductive</span> <a name="Return"><span class="id" type="inductive">Return</span></a> (<span class="id" type="var">A</span>:<span class="id" type="keyword">Type</span>): <span class="id" type="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Normal"><span class="id" type="constructor">Normal</span></a>: <span class="id" type="var">A</span> -&gt; <a class="idref" href="values.html#Return"><span class="id" type="inductive">Return</span></a> <span class="id" type="var">A</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Run_Time_Error"><span class="id" type="constructor">Run_Time_Error</span></a>: <a class="idref" href="values.html#error_type"><span class="id" type="inductive">error_type</span></a> -&gt; <a class="idref" href="values.html#Return"><span class="id" type="inductive">Return</span></a> <span class="id" type="var">A</span>.<br/>
+
+<br/>
+<span class="id" type="var">Arguments</span> <a class="idref" href="values.html#Normal"><span class="id" type="constructor">Normal</span></a> [<span class="id" type="var">A</span>] <span class="id" type="var">_</span>.<br/>
+<span class="id" type="var">Arguments</span> <a class="idref" href="values.html#Run_Time_Error"><span class="id" type="constructor">Run_Time_Error</span></a> [<span class="id" type="var">A</span>] <span class="id" type="var">_</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+the range of 32-bit (singed/unsigned) integer type: 
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> modulus : 2^32 ;
+
+</li>
+<li> half_modulus : 2^31 ;
+
+</li>
+<li> max_unsigned : 2^32 -1 ;
+
+</li>
+<li> max_signed : 2^31 - 1 ;
+
+</li>
+<li> min_signed : -2^31 ;
+
+</li>
+</ul>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="wordsize"><span class="id" type="definition">wordsize</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a> := 32.<br/>
+<span class="id" type="keyword">Definition</span> <a name="modulus"><span class="id" type="definition">modulus</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zpower.html#two_power_nat"><span class="id" type="definition">two_power_nat</span></a> <a class="idref" href="values.html#wordsize"><span class="id" type="definition">wordsize</span></a>.<br/>
+<span class="id" type="keyword">Definition</span> <a name="half_modulus"><span class="id" type="definition">half_modulus</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.div"><span class="id" type="definition">Z.div</span></a> <a class="idref" href="values.html#modulus"><span class="id" type="definition">modulus</span></a> 2.<br/>
+<span class="id" type="keyword">Definition</span> <a name="max_unsigned"><span class="id" type="definition">max_unsigned</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.sub"><span class="id" type="definition">Z.sub</span></a> <a class="idref" href="values.html#modulus"><span class="id" type="definition">modulus</span></a> 1.<br/>
+<span class="id" type="keyword">Definition</span> <a name="max_signed"><span class="id" type="definition">max_signed</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.sub"><span class="id" type="definition">Z.sub</span></a> <a class="idref" href="values.html#half_modulus"><span class="id" type="definition">half_modulus</span></a> 1.<br/>
+<span class="id" type="keyword">Definition</span> <a name="min_signed"><span class="id" type="definition">min_signed</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.opp"><span class="id" type="definition">Z.opp</span></a> <a class="idref" href="values.html#half_modulus"><span class="id" type="definition">half_modulus</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab108"></a><h1 class="section">Stored Values</h1>
+
+<div class="paragraph"> </div>
+
+ Type of basic values
+<div class="paragraph"> </div>
+
+ TODO: now we only model the 32-bit singed integer for SPARK 
+    program, where Coq integer (Z) is used to represent this integer  
+    value with a range bound between min_signed and max_signed. 
+    This integer range constraint is enforced when we define the
+    semantics for the language;
+
+<div class="paragraph"> </div>
+
+ Type of stored values in the store 
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="value"><span class="id" type="inductive">value</span></a>: <span class="id" type="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Undefined"><span class="id" type="constructor">Undefined</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Int"><span class="id" type="constructor">Int</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Bool"><span class="id" type="constructor">Bool</span></a> (<span class="id" type="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" type="inductive">bool</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="ArrayV"><span class="id" type="constructor">ArrayV</span></a> (<span class="id" type="var">a</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> (<a class="idref" href="language_basics.html#arrindex"><span class="id" type="definition">arrindex</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:type_scope:x_'*'_x"><span class="id" type="notation">*</span></a> <a class="idref" href="values.html#value"><span class="id" type="inductive">value</span></a>)) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="RecordV"><span class="id" type="constructor">RecordV</span></a> (<span class="id" type="var">r</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> (<a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:type_scope:x_'*'_x"><span class="id" type="notation">*</span></a> <a class="idref" href="values.html#value"><span class="id" type="inductive">value</span></a>)).<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Division_Error"><span class="id" type="definition">Division_Error</span></a>: <a class="idref" href="values.html#Return"><span class="id" type="inductive">Return</span></a> <a class="idref" href="values.html#value"><span class="id" type="inductive">value</span></a> := <a class="idref" href="values.html#Run_Time_Error"><span class="id" type="constructor">Run_Time_Error</span></a> <a class="idref" href="values.html#RTE_Division_By_Zero"><span class="id" type="constructor">RTE_Division_By_Zero</span></a>.<br/>
+<span class="id" type="keyword">Definition</span> <a name="Overflow_Error"><span class="id" type="definition">Overflow_Error</span></a>: <a class="idref" href="values.html#Return"><span class="id" type="inductive">Return</span></a> <a class="idref" href="values.html#value"><span class="id" type="inductive">value</span></a> := <a class="idref" href="values.html#Run_Time_Error"><span class="id" type="constructor">Run_Time_Error</span></a> <a class="idref" href="values.html#RTE_Overflow"><span class="id" type="constructor">RTE_Overflow</span></a>.<br/>
+<span class="id" type="keyword">Definition</span> <a name="Range_Error"><span class="id" type="definition">Range_Error</span></a>: <a class="idref" href="values.html#Return"><span class="id" type="inductive">Return</span></a> <a class="idref" href="values.html#value"><span class="id" type="inductive">value</span></a> := <a class="idref" href="values.html#Run_Time_Error"><span class="id" type="constructor">Run_Time_Error</span></a> <a class="idref" href="values.html#RTE_Range"><span class="id" type="constructor">RTE_Range</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab109"></a><h1 class="section">value types for run time checks optimization</h1>
+
+<div class="paragraph"> </div>
+
+ value is represented by a range, for a variable, if its initial value is undefined 
+    or it's a parameter or its value is dynamically determined, then we use the range 
+    of its type as its value, e.g. x: Integer; it's value is: (Interval Integer'First Integer'Last),
+    x: Integer := 1; it's value is: (Interval 1 1);
+    for boolean value, it doesn't matter whether it's true or false, so we just use Bool to 
+    represent boolean value;
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Inductive</span> <a name="bound"><span class="id" type="inductive">bound</span></a> : <span class="id" type="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;| <a name="Interval"><span class="id" type="constructor">Interval</span></a> (<span class="id" type="var">l</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a>) (<span class="id" type="var">u</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a>)<br/>
+&nbsp;&nbsp;| <a name="Boolval"><span class="id" type="constructor">Boolval</span></a><br/>
+&nbsp;&nbsp;| <a name="Aggregate"><span class="id" type="constructor">Aggregate</span></a>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="int32_bound"><span class="id" type="definition">int32_bound</span></a> : <a class="idref" href="values.html#bound"><span class="id" type="inductive">bound</span></a> := (<a class="idref" href="values.html#Interval"><span class="id" type="constructor">Interval</span></a> <a class="idref" href="values.html#min_signed"><span class="id" type="definition">min_signed</span></a> <a class="idref" href="values.html#max_signed"><span class="id" type="definition">max_signed</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+check whether a value falls in a bound 
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="in_bound"><span class="id" type="inductive">in_bound</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a> -&gt; <a class="idref" href="values.html#bound"><span class="id" type="inductive">bound</span></a> -&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" type="inductive">bool</span></a> -&gt; <span class="id" type="keyword">Prop</span> :=<br/>
+&nbsp;&nbsp;| <a name="IB_True"><span class="id" type="constructor">IB_True</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">v</span> <span class="id" type="var">l</span> <span class="id" type="var">u</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zle_bool"><span class="id" type="abbreviation">Zle_bool</span></a> <a class="idref" href="values.html#l"><span class="id" type="variable">l</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">&amp;&amp;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zle_bool"><span class="id" type="abbreviation">Zle_bool</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> <a class="idref" href="values.html#u"><span class="id" type="variable">u</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#true"><span class="id" type="constructor">true</span></a> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="values.html#in_bound"><span class="id" type="inductive">in_bound</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> (<a class="idref" href="values.html#Interval"><span class="id" type="constructor">Interval</span></a> <a class="idref" href="values.html#l"><span class="id" type="variable">l</span></a> <a class="idref" href="values.html#u"><span class="id" type="variable">u</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#true"><span class="id" type="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <a name="IB_False"><span class="id" type="constructor">IB_False</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">v</span> <span class="id" type="var">l</span> <span class="id" type="var">u</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zle_bool"><span class="id" type="abbreviation">Zle_bool</span></a> <a class="idref" href="values.html#l"><span class="id" type="variable">l</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">&amp;&amp;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zle_bool"><span class="id" type="abbreviation">Zle_bool</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> <a class="idref" href="values.html#u"><span class="id" type="variable">u</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:bool_scope:x_'&&'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#false"><span class="id" type="constructor">false</span></a> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="values.html#in_bound"><span class="id" type="inductive">in_bound</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> (<a class="idref" href="values.html#Interval"><span class="id" type="constructor">Interval</span></a> <a class="idref" href="values.html#l"><span class="id" type="variable">l</span></a> <a class="idref" href="values.html#u"><span class="id" type="variable">u</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#false"><span class="id" type="constructor">false</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab110"></a><h1 class="section">Value Operations</h1>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Module</span> <a name="Math"><span class="id" type="module">Math</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab111"></a><h2 class="section">Arithmetic Operations</h2>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.add"><span class="id" type="definition">add</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<span class="id" type="var">v1'</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#:Z_scope:x_'+'_x"><span class="id" type="notation">+</span></a> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.sub"><span class="id" type="definition">sub</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<span class="id" type="var">v1'</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#:Z_scope:x_'-'_x"><span class="id" type="notation">-</span></a> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.mul"><span class="id" type="definition">mul</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<span class="id" type="var">v1'</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#:Z_scope:x_'*'_x"><span class="id" type="notation">*</span></a> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+map Ada operators to corresponding Coq operators:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> div -&gt; Z.quot
+
+</li>
+<li> rem -&gt; Z.rem
+
+</li>
+<li> mod -&gt; Z.modulo
+
+<div class="paragraph"> </div>
+
+      (Note: Ada "mod" has the following formula in Why:    
+<ul class="doclist">
+<li> if y &gt; 0 then EuclideanDivision.mod x y else EuclideanDivision.mod x y + y)
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.div"><span class="id" type="definition">div</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.quot"><span class="id" type="definition">Z.quot</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.rem"><span class="id" type="definition">rem</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.rem"><span class="id" type="definition">Z.rem</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.mod'"><span class="id" type="definition">mod'</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.modulo"><span class="id" type="definition">Z.modulo</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab112"></a><h2 class="section">Logic Operations</h2>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="Math.and"><span class="id" type="definition">and</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#andb"><span class="id" type="definition">andb</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.or"><span class="id" type="definition">or</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#orb"><span class="id" type="definition">orb</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab113"></a><h2 class="section">Relational Operations</h2>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="Math.eq"><span class="id" type="definition">eq</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zeq_bool"><span class="id" type="definition">Zeq_bool</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.ne"><span class="id" type="definition">ne</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zneq_bool"><span class="id" type="definition">Zneq_bool</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.gt"><span class="id" type="definition">gt</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zgt_bool"><span class="id" type="abbreviation">Zgt_bool</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.ge"><span class="id" type="definition">ge</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zge_bool"><span class="id" type="abbreviation">Zge_bool</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.lt"><span class="id" type="definition">lt</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zlt_bool"><span class="id" type="abbreviation">Zlt_bool</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.le"><span class="id" type="definition">le</span></a> (<span class="id" type="var">v1</span> <span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a>, <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v1'</span>, <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.Zbool.html#Zle_bool"><span class="id" type="abbreviation">Zle_bool</span></a> <span class="id" type="var">v1'</span> <span class="id" type="var">v2'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>, <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Unary Operations 
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="Math.unary_not"><span class="id" type="definition">unary_not</span></a> (<span class="id" type="var">v</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> <span class="id" type="var">v'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Bool"><span class="id" type="constructor">Bool</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#negb"><span class="id" type="definition">negb</span></a> <span class="id" type="var">v'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.unary_plus"><span class="id" type="definition">unary_plus</span></a> (<span class="id" type="var">v</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">Definition</span> <a name="Math.unary_minus"><span class="id" type="definition">unary_minus</span></a> (<span class="id" type="var">v</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> <span class="id" type="var">v'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="values.html#Math.Int"><span class="id" type="constructor">Int</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.ZArith.BinInt.html#Z.opp"><span class="id" type="definition">Z.opp</span></a> <span class="id" type="var">v'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab114"></a><h1 class="section">Binary Operations</h1>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="Math.binary_operation"><span class="id" type="definition">binary_operation</span></a> (<span class="id" type="var">op</span>: <a class="idref" href="language_basics.html#binary_operator"><span class="id" type="inductive">binary_operator</span></a>) (<span class="id" type="var">v1</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>) (<span class="id" type="var">v2</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#op"><span class="id" type="variable">op</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Equal"><span class="id" type="constructor">Equal</span></a> =&gt; <a class="idref" href="values.html#Math.eq"><span class="id" type="definition">eq</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Not_Equal"><span class="id" type="constructor">Not_Equal</span></a> =&gt; <a class="idref" href="values.html#Math.ne"><span class="id" type="definition">ne</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Greater_Than"><span class="id" type="constructor">Greater_Than</span></a> =&gt; <a class="idref" href="values.html#Math.gt"><span class="id" type="definition">gt</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Greater_Than_Or_Equal"><span class="id" type="constructor">Greater_Than_Or_Equal</span></a> =&gt; <a class="idref" href="values.html#Math.ge"><span class="id" type="definition">ge</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Less_Than"><span class="id" type="constructor">Less_Than</span></a> =&gt; <a class="idref" href="values.html#Math.lt"><span class="id" type="definition">lt</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Less_Than_Or_Equal"><span class="id" type="constructor">Less_Than_Or_Equal</span></a> =&gt; <a class="idref" href="values.html#Math.le"><span class="id" type="definition">le</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#And"><span class="id" type="constructor">And</span></a> =&gt; <a class="idref" href="values.html#Math.and"><span class="id" type="definition">and</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Or"><span class="id" type="constructor">Or</span></a> =&gt; <a class="idref" href="values.html#Math.or"><span class="id" type="definition">or</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Plus"><span class="id" type="constructor">Plus</span></a> =&gt; <a class="idref" href="values.html#Math.add"><span class="id" type="definition">add</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Minus"><span class="id" type="constructor">Minus</span></a> =&gt; <a class="idref" href="values.html#Math.sub"><span class="id" type="definition">sub</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Multiply"><span class="id" type="constructor">Multiply</span></a> =&gt; <a class="idref" href="values.html#Math.mul"><span class="id" type="definition">mul</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Divide"><span class="id" type="constructor">Divide</span></a> =&gt; <a class="idref" href="values.html#Math.div"><span class="id" type="definition">div</span></a> <a class="idref" href="values.html#v1"><span class="id" type="variable">v1</span></a> <a class="idref" href="values.html#v2"><span class="id" type="variable">v2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab115"></a><h1 class="section">Unary Operations</h1>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Definition</span> <a name="Math.unary_operation"><span class="id" type="definition">unary_operation</span></a> (<span class="id" type="var">op</span>: <a class="idref" href="language_basics.html#unary_operator"><span class="id" type="inductive">unary_operator</span></a>) (<span class="id" type="var">v</span>: <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="values.html#Math.value"><span class="id" type="inductive">value</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="values.html#op"><span class="id" type="variable">op</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Not"><span class="id" type="constructor">Not</span></a> =&gt; <a class="idref" href="values.html#Math.unary_not"><span class="id" type="definition">unary_not</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Unary_Plus"><span class="id" type="constructor">Unary_Plus</span></a> =&gt; <a class="idref" href="values.html#Math.unary_plus"><span class="id" type="definition">unary_plus</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_basics.html#Unary_Minus"><span class="id" type="constructor">Unary_Minus</span></a> =&gt; <a class="idref" href="values.html#Math.unary_minus"><span class="id" type="definition">unary_minus</span></a> <a class="idref" href="values.html#v"><span class="id" type="variable">v</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <a class="idref" href="values.html#"><span class="id" type="module">Math</span></a>.<br/>
+
+<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

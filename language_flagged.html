@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>language_flagged</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">language_flagged</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="language.html#"><span class="id" type="library">language</span></a>.<br/>
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="checks.html#"><span class="id" type="library">checks</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+This file can be auto-generated from language_template.v by running languagegen in terminal 
+<div class="paragraph"> </div>
+
+<a name="lab84"></a><h1 class="section">SPARK Subset Language</h1>
+
+<div class="paragraph"> </div>
+
+ We use the Ada terminology to define the terms of this subset 
+    language, which makes it easy for Ada(SPARK) users to read it;
+    Besides, we also indicate the reference chapter (for example, ,3.5.3)
+    in Ada 2012 RM, and formalize the language in the same (not exactly) 
+    order as they are defined in Ada 2012 RM;
+
+</div>
+<div class="code">
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab85"></a><h2 class="section">Expressions</h2>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Inductive</span> <a name="expression_x"><span class="id" type="inductive">expression_x</span></a>: <span class="id" type="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Literal_X"><span class="id" type="constructor">E_Literal_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#literal"><span class="id" type="inductive">literal</span></a> -&gt; <a class="idref" href="checks.html#interior_checks"><span class="id" type="definition">interior_checks</span></a> -&gt; <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Name_X"><span class="id" type="constructor">E_Name_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Binary_Operation_X"><span class="id" type="constructor">E_Binary_Operation_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#binary_operator"><span class="id" type="inductive">binary_operator</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="checks.html#interior_checks"><span class="id" type="definition">interior_checks</span></a> -&gt; <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Unary_Operation_X"><span class="id" type="constructor">E_Unary_Operation_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#unary_operator"><span class="id" type="inductive">unary_operator</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="checks.html#interior_checks"><span class="id" type="definition">interior_checks</span></a> -&gt; <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> <br/>
+<br/>
+</div>
+
+<div class="doc">
+in E_Indexed_Component_X, the first astnum is the ast number for the indexed component, 
+    and the second astnum is the ast number for array represented by name_x;
+    in E_Selected_Component_X, the first astnum is the ast number for the record field,
+    and second astnum is the ast number for record represented by name_x;
+ 
+</div>
+<div class="code">
+<span class="id" type="keyword">with</span> <a name="name_x"><span class="id" type="inductive">name_x</span></a>: <span class="id" type="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Identifier_X"><span class="id" type="constructor">E_Identifier_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a> -&gt; <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Indexed_Component_X"><span class="id" type="constructor">E_Indexed_Component_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="E_Selected_Component_X"><span class="id" type="constructor">E_Selected_Component_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> -&gt; <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a> -&gt; <a class="idref" href="checks.html#exterior_checks"><span class="id" type="definition">exterior_checks</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> .<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Induction scheme for expression_x and name_x 
+<div class="paragraph"> </div>
+
+Scheme expression_x_ind := Induction for expression_x Sort Prop
+                         with name_x_ind := Induction for name_x Sort Prop.
+
+<div class="paragraph"> </div>
+
+<a name="lab86"></a><h2 class="section">Statements</h2>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="statement_x"><span class="id" type="inductive">statement_x</span></a>: <span class="id" type="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="S_Null_X"><span class="id" type="constructor">S_Null_X</span></a>: <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="S_Assignment_X"><span class="id" type="constructor">S_Assignment_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#name_x"><span class="id" type="inductive">name_x</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="S_If_X"><span class="id" type="constructor">S_If_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="S_While_Loop_X"><span class="id" type="constructor">S_While_Loop_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="S_Procedure_Call_X"><span class="id" type="constructor">S_Procedure_Call_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#procnum"><span class="id" type="definition">procnum</span></a> -&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> <a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a>  <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="S_Sequence_X"><span class="id" type="constructor">S_Sequence_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> -&gt; <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a> .<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+it's used for subtype declarations:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> subtype declaration,      e.g. subtype MyInt is Integer range 0 .. 5;
+
+</li>
+<li> derived type declaration, e.g. type MyInt is new Integer range 1 .. 100;
+
+</li>
+<li> integer type declaration, e.g. type MyInt is range 1 .. 10;
+
+</li>
+</ul>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="range_x"><span class="id" type="inductive">range_x</span></a>: <span class="id" type="keyword">Type</span> := <a name="Range_X"><span class="id" type="constructor">Range_X</span></a> (<span class="id" type="var">l</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a>) (<span class="id" type="var">u</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" type="inductive">Z</span></a>). 
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab87"></a><h2 class="section">Type Declarations</h2>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a>: <span class="id" type="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Subtype_Declaration_X"><span class="id" type="constructor">Subtype_Declaration_X</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#typenum"><span class="id" type="definition">typenum</span></a>  -&gt; <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a> -&gt; <a class="idref" href="language_flagged.html#range_x"><span class="id" type="inductive">range_x</span></a> -&gt; <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Derived_Type_Declaration_X"><span class="id" type="constructor">Derived_Type_Declaration_X</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#typenum"><span class="id" type="definition">typenum</span></a>  -&gt; <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a> -&gt; <a class="idref" href="language_flagged.html#range_x"><span class="id" type="inductive">range_x</span></a> -&gt; <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Integer_Type_Declaration_X"><span class="id" type="constructor">Integer_Type_Declaration_X</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#typenum"><span class="id" type="definition">typenum</span></a>  -&gt; <a class="idref" href="language_flagged.html#range_x"><span class="id" type="inductive">range_x</span></a> -&gt; <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Array_Type_Declaration_X"><span class="id" type="constructor">Array_Type_Declaration_X</span></a>: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#typenum"><span class="id" type="definition">typenum</span></a>  -&gt; <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a>  -&gt; <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a>  -&gt; <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Record_Type_Declaration_X"><span class="id" type="constructor">Record_Type_Declaration_X</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_basics.html#typenum"><span class="id" type="definition">typenum</span></a>  -&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> (<a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:type_scope:x_'*'_x"><span class="id" type="notation">*</span></a> <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a> ) -&gt; <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a> .<br/>
+
+<br/>
+<span class="id" type="keyword">Record</span> <a name="object_declaration_x"><span class="id" type="record">object_declaration_x</span></a>: <span class="id" type="keyword">Type</span> := <a name="mkobject_declaration_x"><span class="id" type="constructor">mkobject_declaration_x</span></a>{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="declaration_astnum_x"><span class="id" type="projection">declaration_astnum_x</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="object_name_x"><span class="id" type="projection">object_name_x</span></a>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="object_nominal_subtype_x"><span class="id" type="projection">object_nominal_subtype_x</span></a>: <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="initialization_expression_x"><span class="id" type="projection">initialization_expression_x</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> (<a class="idref" href="language_flagged.html#expression_x"><span class="id" type="inductive">expression_x</span></a>)<br/>
+}.<br/>
+
+<br/>
+<span class="id" type="keyword">Record</span> <a name="parameter_specification_x"><span class="id" type="record">parameter_specification_x</span></a>: <span class="id" type="keyword">Type</span> := <a name="mkparameter_specification_x"><span class="id" type="constructor">mkparameter_specification_x</span></a>{<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="parameter_astnum_x"><span class="id" type="projection">parameter_astnum_x</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="parameter_name_x"><span class="id" type="projection">parameter_name_x</span></a>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="parameter_subtype_mark_x"><span class="id" type="projection">parameter_subtype_mark_x</span></a>: <a class="idref" href="language_basics.html#type"><span class="id" type="inductive">type</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="parameter_mode_x"><span class="id" type="projection">parameter_mode_x</span></a>: <a class="idref" href="language_basics.html#mode"><span class="id" type="inductive">mode</span></a><br/>
+<br/>
+}.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab88"></a><h2 class="section">Declarations</h2>
+
+</div>
+<div class="code">
+<span class="id" type="keyword">Inductive</span> <a name="declaration_x"><span class="id" type="inductive">declaration_x</span></a>: <span class="id" type="keyword">Type</span> :=  <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="D_Null_Declaration_X"><span class="id" type="constructor">D_Null_Declaration_X</span></a>: <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="D_Type_Declaration_X"><span class="id" type="constructor">D_Type_Declaration_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a> -&gt; <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="D_Object_Declaration_X"><span class="id" type="constructor">D_Object_Declaration_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#object_declaration_x"><span class="id" type="record">object_declaration_x</span></a> -&gt; <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="D_Procedure_Body_X"><span class="id" type="constructor">D_Procedure_Body_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#procedure_body_x"><span class="id" type="inductive">procedure_body_x</span></a> -&gt; <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="D_Seq_Declaration_X"><span class="id" type="constructor">D_Seq_Declaration_X</span></a>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a> -&gt; <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a> -&gt; <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a> -&gt; <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a> <br/>
+<br/>
+<span class="id" type="keyword">with</span> <a name="procedure_body_x"><span class="id" type="inductive">procedure_body_x</span></a>: <span class="id" type="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;<a name="mkprocedure_body_x"><span class="id" type="constructor">mkprocedure_body_x</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">procedure_astnum_x</span>: <a class="idref" href="language_basics.html#astnum"><span class="id" type="definition">astnum</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">procedure_name_x</span>: <a class="idref" href="language_basics.html#procnum"><span class="id" type="definition">procnum</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">procedure_parameter_profile_x</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> <a class="idref" href="language_flagged.html#parameter_specification_x"><span class="id" type="record">parameter_specification_x</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">procedure_declarative_part_x</span>: <a class="idref" href="language_flagged.html#declaration_x"><span class="id" type="inductive">declaration_x</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="var">procedure_statements_x</span>: <a class="idref" href="language_flagged.html#statement_x"><span class="id" type="inductive">statement_x</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab89"></a><h2 class="section">Auxiliary Functions</h2>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Section</span> <a name="AuxiliaryFunctions_X"><span class="id" type="section">AuxiliaryFunctions_X</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="procedure_statements_x"><span class="id" type="definition">procedure_statements_x</span></a> <span class="id" type="var">pb</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#pb"><span class="id" type="variable">pb</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#mkprocedure_body_x"><span class="id" type="constructor">mkprocedure_body_x</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> =&gt; <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="procedure_declarative_part_x"><span class="id" type="definition">procedure_declarative_part_x</span></a> <span class="id" type="var">pb</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#pb"><span class="id" type="variable">pb</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#mkprocedure_body_x"><span class="id" type="constructor">mkprocedure_body_x</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">_</span> =&gt; <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="procedure_parameter_profile_x"><span class="id" type="definition">procedure_parameter_profile_x</span></a> <span class="id" type="var">pb</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#pb"><span class="id" type="variable">pb</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#mkprocedure_body_x"><span class="id" type="constructor">mkprocedure_body_x</span></a> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> =&gt; <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="procedure_name_x"><span class="id" type="definition">procedure_name_x</span></a> <span class="id" type="var">pb</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#pb"><span class="id" type="variable">pb</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#mkprocedure_body_x"><span class="id" type="constructor">mkprocedure_body_x</span></a> <span class="id" type="var">_</span> <span class="id" type="var">x</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span> =&gt; <span class="id" type="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="type_name_x"><span class="id" type="definition">type_name_x</span></a> <span class="id" type="var">td</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#td"><span class="id" type="variable">td</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Subtype_Declaration_X"><span class="id" type="constructor">Subtype_Declaration_X</span></a> <span class="id" type="var">_</span> <span class="id" type="var">tn</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>        =&gt; <span class="id" type="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Derived_Type_Declaration_X"><span class="id" type="constructor">Derived_Type_Declaration_X</span></a> <span class="id" type="var">_</span> <span class="id" type="var">tn</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>   =&gt; <span class="id" type="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Integer_Type_Declaration_X"><span class="id" type="constructor">Integer_Type_Declaration_X</span></a> <span class="id" type="var">_</span> <span class="id" type="var">tn</span> <span class="id" type="var">_</span>     =&gt; <span class="id" type="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Array_Type_Declaration_X"><span class="id" type="constructor">Array_Type_Declaration_X</span></a> <span class="id" type="var">_</span> <span class="id" type="var">tn</span> <span class="id" type="var">_</span> <span class="id" type="var">_</span>     =&gt; <span class="id" type="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Record_Type_Declaration_X"><span class="id" type="constructor">Record_Type_Declaration_X</span></a> <span class="id" type="var">_</span> <span class="id" type="var">tn</span> <span class="id" type="var">_</span>      =&gt; <span class="id" type="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="subtype_range_x"><span class="id" type="definition">subtype_range_x</span></a> (<span class="id" type="var">t</span>: <a class="idref" href="language_flagged.html#type_declaration_x"><span class="id" type="inductive">type_declaration_x</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="language_flagged.html#range_x"><span class="id" type="inductive">range_x</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#t"><span class="id" type="variable">t</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Subtype_Declaration_X"><span class="id" type="constructor">Subtype_Declaration_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">tn</span> <span class="id" type="var">t</span> <span class="id" type="var">r</span>      =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">r</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Derived_Type_Declaration_X"><span class="id" type="constructor">Derived_Type_Declaration_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">tn</span> <span class="id" type="var">t</span> <span class="id" type="var">r</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">r</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#Integer_Type_Declaration_X"><span class="id" type="constructor">Integer_Type_Declaration_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">tn</span> <span class="id" type="var">r</span>   =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">r</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">_</span>                                          =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="expression_astnum_x"><span class="id" type="definition">expression_astnum_x</span></a> <span class="id" type="var">e</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#e"><span class="id" type="variable">e</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Literal_X"><span class="id" type="constructor">E_Literal_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">l</span> <span class="id" type="var">in_checks</span> <span class="id" type="var">ex_checks</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Name_X"><span class="id" type="constructor">E_Name_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">n</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Binary_Operation_X"><span class="id" type="constructor">E_Binary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">bop</span> <span class="id" type="var">e1</span> <span class="id" type="var">e2</span> <span class="id" type="var">in_checks</span> <span class="id" type="var">ex_checks</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Unary_Operation_X"><span class="id" type="constructor">E_Unary_Operation_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">uop</span> <span class="id" type="var">e</span> <span class="id" type="var">in_checks</span> <span class="id" type="var">ex_checks</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="name_astnum_x"><span class="id" type="definition">name_astnum_x</span></a> <span class="id" type="var">n</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="language_flagged.html#n"><span class="id" type="variable">n</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Identifier_X"><span class="id" type="constructor">E_Identifier_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">ex_checks</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Indexed_Component_X"><span class="id" type="constructor">E_Indexed_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">e</span> <span class="id" type="var">ex_checks</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="language_flagged.html#E_Selected_Component_X"><span class="id" type="constructor">E_Selected_Component_X</span></a> <span class="id" type="var">ast_num</span> <span class="id" type="var">x</span> <span class="id" type="var">f</span> <span class="id" type="var">ex_checks</span> =&gt; <span class="id" type="var">ast_num</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <a class="idref" href="language_flagged.html#AuxiliaryFunctions_X"><span class="id" type="section">AuxiliaryFunctions_X</span></a>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

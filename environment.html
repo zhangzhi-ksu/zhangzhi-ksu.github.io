@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<link href="coqdoc.css" rel="stylesheet" type="text/css"/>
+<title>environment</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">environment</h1>
+
+<div class="code">
+<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Export</span> <a class="idref" href="values.html#"><span class="id" type="library">values</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+for any valid variable x, it has an in/out mode, type and value 
+    (either defined or undefined); as the in/out mode and type are
+    invariant since the variable is declared, and they are used only
+    at compile time, we keep these invariant information in a symbol 
+    table called <i>symtb</i>; while the value of a variable will change 
+    as the program executes, and it's used in run time evaluation, 
+    so we keep this information in a store called <i>store</i>;
+
+<div class="paragraph"> </div>
+
+<a name="lab116"></a><h1 class="section">Store</h1>
+ it's a map from a variable, represented with natural number,
+    to its value;
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" type="keyword">Module</span> <span class="id" type="keyword">Type</span> <a name="ENTRY"><span class="id" type="module">ENTRY</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Parameter</span> <a name="ENTRY.T"><span class="id" type="axiom">T</span></a>:<span class="id" type="keyword">Type</span>.<br/>
+<span class="id" type="keyword">End</span> <a class="idref" href="environment.html#"><span class="id" type="module">ENTRY</span></a>.<br/>
+
+<br/>
+<span class="id" type="keyword">Module</span> <a name="STORE"><span class="id" type="module">STORE</span></a>(<span class="id" type="var">V</span>:<a class="idref" href="environment.html#"><span class="id" type="module">ENTRY</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Notation</span> <a name="STORE.V"><span class="id" type="abbreviation">V</span></a>:=<a class="idref" href="environment.html#V.T"><span class="id" type="axiom">V.T</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.store"><span class="id" type="definition">store</span></a> : <span class="id" type="keyword">Type</span> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> (<a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:type_scope:x_'*'_x"><span class="id" type="notation">*</span></a> <a class="idref" href="environment.html#STORE.V"><span class="id" type="abbreviation">V</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab117"></a><h2 class="section">Store Operations</h2>
+ check whether variable x has already been declared 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">resides</span> (<span class="id" type="var">x</span> : <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">s</span> : <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a>) := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <span class="id" type="var">v</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">if</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" type="definition">beq_nat</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">y</span> <span class="id" type="keyword">then</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#true"><span class="id" type="constructor">true</span></a> <span class="id" type="keyword">else</span> <a class="idref" href="environment.html#resides"><span class="id" type="definition">resides</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">s'</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#false"><span class="id" type="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+fetch the value of x that has already been initialized in store 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">fetches</span> (<span class="id" type="var">x</span> : <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">s</span> : <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="environment.html#STORE.V"><span class="id" type="abbreviation">V</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <span class="id" type="var">v</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">if</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" type="definition">beq_nat</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">y</span> <span class="id" type="keyword">then</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">v</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">else</span> <a class="idref" href="environment.html#fetches"><span class="id" type="definition">fetches</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">s'</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><span class="id" type="var">cut_to</span></span> <span class="inlinecode"><span class="id" type="var">x</span></span> <span class="inlinecode"><span class="id" type="var">s</span></span> return the pair (s',s'') where s = s' ++ s'' and s''
+      starts with the first occurrence of <span class="inlinecode"><span class="id" type="var">x</span></span> in <span class="inlinecode"><span class="id" type="var">s</span></span>. If no occurrence
+      of <span class="inlinecode"><span class="id" type="var">x</span></span> exists in <span class="inlinecode"><span class="id" type="var">s</span></span> then (nil,nil) is returned. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">cuts_to</span> (<span class="id" type="var">x</span> : <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">s</span> : <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a>): <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:type_scope:x_'*'_x"><span class="id" type="notation">*</span></a><a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <span class="id" type="var">v</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" type="keyword">if</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" type="definition">beq_nat</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">y</span> <span class="id" type="keyword">then</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">else</span> <span class="id" type="keyword">let</span> (<span class="id" type="var">l1</span>,<span class="id" type="var">l2</span>) := <a class="idref" href="environment.html#cuts_to"><span class="id" type="definition">cuts_to</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">s'</span> <span class="id" type="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(((</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <span class="id" type="var">v</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a><a class="idref" href="environment.html#l1"><span class="id" type="variable">l1</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <a class="idref" href="environment.html#l2"><span class="id" type="variable">l2</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+update the latest binding for x 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">updates</span> (<span class="id" type="var">s</span>: <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a>) (<span class="id" type="var">x</span> : <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">v</span>: <a class="idref" href="environment.html#STORE.V"><span class="id" type="abbreviation">V</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <span class="id" type="var">v'</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">if</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" type="definition">beq_nat</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">y</span> <span class="id" type="keyword">then</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a><span class="id" type="var">s'</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">else</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#updates"><span class="id" type="definition">updates</span></a> <span class="id" type="var">s'</span> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">s''</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><span class="id" type="var">y</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a><span class="id" type="var">v'</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a><span class="id" type="var">s''</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab118"></a><h2 class="section">Lemmas About Store Operations</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.updates_length"><span class="id" type="lemma">updates_length</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span> <span class="id" type="var">s'</span>, <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.updates"><span class="id" type="definition">updates</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> -&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">functional</span> <span class="id" type="tactic">induction</span> <a class="idref" href="environment.html#STORE.updates"><span class="id" type="definition">updates</span></a> <span class="id" type="var">s</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span>;<span class="id" type="tactic">simpl</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;; <span class="id" type="tactic">intros</span> <span class="id" type="var">updateds</span> <span class="id" type="var">heq</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">heq</span>;<span class="id" type="tactic">clear</span> <span class="id" type="var">heq</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;; <span class="id" type="tactic">subst</span>;<span class="id" type="tactic">simpl</span>;<span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab119"></a><h1 class="section">Stack</h1>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.scope_level"><span class="id" type="definition">scope_level</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" type="inductive">nat</span></a>. 
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.frame"><span class="id" type="definition">frame</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#prod"><span class="id" type="inductive">prod</span></a> <a class="idref" href="environment.html#STORE.scope_level"><span class="id" type="definition">scope_level</span></a> <a class="idref" href="environment.html#STORE.store"><span class="id" type="definition">store</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.level_of"><span class="id" type="definition">level_of</span></a> (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#fst"><span class="id" type="definition">fst</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.store_of"><span class="id" type="definition">store_of</span></a> (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#snd"><span class="id" type="definition">snd</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.stack"><span class="id" type="definition">stack</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#list"><span class="id" type="inductive">list</span></a> <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.reside"><span class="id" type="definition">reside</span></a> (<span class="id" type="var">x</span>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) := <a class="idref" href="environment.html#STORE.resides"><span class="id" type="definition">resides</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.fetch"><span class="id" type="definition">fetch</span></a> (<span class="id" type="var">x</span>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) := <a class="idref" href="environment.html#STORE.fetches"><span class="id" type="definition">fetches</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.cut_to"><span class="id" type="definition">cut_to</span></a> (<span class="id" type="var">x</span>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) := <a class="idref" href="environment.html#STORE.cuts_to"><span class="id" type="definition">cuts_to</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.update"><span class="id" type="definition">update</span></a> (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) (<span class="id" type="var">x</span>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">v</span>: <a class="idref" href="environment.html#STORE.V"><span class="id" type="abbreviation">V</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#STORE.updates"><span class="id" type="definition">updates</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>) <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">s</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><a class="idref" href="environment.html#STORE.level_of"><span class="id" type="definition">level_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <span class="id" type="var">s</span><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.push"><span class="id" type="definition">push</span></a> (<span class="id" type="var">f</span>: <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>) (<span class="id" type="var">x</span>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">v</span>: <a class="idref" href="environment.html#STORE.V"><span class="id" type="abbreviation">V</span></a>) := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><a class="idref" href="environment.html#STORE.level_of"><span class="id" type="definition">level_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">(</span></a><a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">)</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.newFrame"><span class="id" type="definition">newFrame</span></a> (<span class="id" type="var">n</span>: <a class="idref" href="environment.html#STORE.scope_level"><span class="id" type="definition">scope_level</span></a>): <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">(</span></a><a class="idref" href="environment.html#n"><span class="id" type="variable">n</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">,</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:core_scope:'('_x_','_x_','_'..'_','_x_')'"><span class="id" type="notation">)</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab120"></a><h2 class="section">Stack Operations</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Definition</span> <a name="STORE.pushG"><span class="id" type="definition">pushG</span></a> <span class="id" type="var">x</span> <span class="id" type="var">v</span> (<span class="id" type="var">s</span>: <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a>) :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">f</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">(</span></a><a class="idref" href="environment.html#STORE.push"><span class="id" type="definition">push</span></a> <span class="id" type="var">f</span> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">fetchG</span> (<span class="id" type="var">x</span> : <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">s</span> : <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a>) := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">f</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#STORE.fetch"><span class="id" type="definition">fetch</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">f</span> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">v</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">v</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a> =&gt; <a class="idref" href="environment.html#fetchG"><span class="id" type="definition">fetchG</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">s'</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">updateG</span> (<span class="id" type="var">s</span>: <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a>) (<span class="id" type="var">x</span>: <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">v</span>: <a class="idref" href="environment.html#STORE.V"><span class="id" type="abbreviation">V</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#option"><span class="id" type="inductive">option</span></a> <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">f</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#STORE.update"><span class="id" type="definition">update</span></a> <span class="id" type="var">f</span> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a> <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">f'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<span class="id" type="var">f'</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a> =&gt; <span class="id" type="keyword">match</span> (<a class="idref" href="environment.html#updateG"><span class="id" type="definition">updateG</span></a> <span class="id" type="var">s'</span> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a>) <span class="id" type="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <span class="id" type="var">s''</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> (<span class="id" type="var">f</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s''</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a>  =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#None"><span class="id" type="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Function</span> <span class="id" type="var">resideG</span> (<span class="id" type="var">x</span> : <a class="idref" href="language_basics.html#idnum"><span class="id" type="definition">idnum</span></a>) (<span class="id" type="var">s</span> : <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a>) := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">match</span> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <span class="id" type="keyword">with</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" type="var">f</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <span class="id" type="var">s'</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">if</span> <a class="idref" href="environment.html#STORE.reside"><span class="id" type="definition">reside</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">f</span> <span class="id" type="keyword">then</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#true"><span class="id" type="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">else</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#resideG"><span class="id" type="definition">resideG</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <span class="id" type="var">s'</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#false"><span class="id" type="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Inductive</span> <a name="STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> : <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a> -&gt; <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a> -&gt; <span class="id" type="keyword">Prop</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="STORE.eqnil"><span class="id" type="constructor">eqnil</span></a>: <a class="idref" href="environment.html#stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" type="constructor">nil</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="STORE.eqncons"><span class="id" type="constructor">eqncons</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">s</span> <span class="id" type="var">s'</span> <span class="id" type="var">f</span> <span class="id" type="var">f'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <a class="idref" href="environment.html#f'"><span class="id" type="variable">f'</span></a>) -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> (<a class="idref" href="environment.html#f"><span class="id" type="variable">f</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a>) (<a class="idref" href="environment.html#f'"><span class="id" type="variable">f'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#:list_scope:x_'::'_x"><span class="id" type="notation">::</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.stack_eq_length_refl"><span class="id" type="lemma">stack_eq_length_refl</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">s</span> <span class="id" type="var">s'</span>, <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> -&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">s</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">s</span>;<span class="id" type="tactic">intros</span> <span class="id" type="var">s'</span> <span class="id" type="var">heq</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">IHs</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Setoids.Setoid.html#"><span class="id" type="library">Setoid</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Require</span> <span class="id" type="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Classes.Morphisms.html#"><span class="id" type="library">Morphisms</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.stack_eq_length_refl2"><span class="id" type="lemma">stack_eq_length_refl2</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Relations.Relation_Definitions.html#reflexive"><span class="id" type="definition">reflexive</span></a> <span class="id" type="var">_</span> <a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">hnf</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="environment.html#STORE.stack_eq_length_refl"><span class="id" type="lemma">stack_eq_length_refl</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.stack_eq_length_sym"><span class="id" type="lemma">stack_eq_length_sym</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">s</span> <span class="id" type="var">s'</span>, <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> -&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">s</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">s</span>;<span class="id" type="tactic">intros</span> <span class="id" type="var">s'</span> <span class="id" type="var">heq</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">inversion</span> <span class="id" type="var">heq</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">inversion</span> <span class="id" type="var">heq</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">IHs</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">symmetry</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.stack_eq_length_trans"><span class="id" type="lemma">stack_eq_length_trans</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">s'</span> <span class="id" type="var">s</span> <span class="id" type="var">s''</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> <a class="idref" href="environment.html#s''"><span class="id" type="variable">s''</span></a> -&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#s''"><span class="id" type="variable">s''</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">s'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">s'</span>;<span class="id" type="tactic">intros</span> <span class="id" type="var">s</span> <span class="id" type="var">s''</span> <span class="id" type="var">heq1</span> <span class="id" type="var">heq2</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;; <span class="id" type="tactic">try</span> <span class="id" type="var">now</span> (<span class="id" type="tactic">inversion</span> <span class="id" type="var">heq1</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">heq2</span>;<span class="id" type="tactic">subst</span>;<span class="id" type="tactic">constructor</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">heq1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">inversion</span> <span class="id" type="var">heq2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">IHs'</span> ;<span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">transitivity</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> (<a class="idref" href="environment.html#STORE.store_of"><span class="id" type="definition">store_of</span></a> <span class="id" type="var">a</span>));<span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.stack_eq_length_trans2"><span class="id" type="lemma">stack_eq_length_trans2</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Relations.Relation_Definitions.html#transitive"><span class="id" type="definition">transitive</span></a> <span class="id" type="var">_</span> <a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">hnf</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">z</span> <span class="id" type="var">H</span> <span class="id" type="var">H0</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">apply</span> <a class="idref" href="environment.html#STORE.stack_eq_length_trans"><span class="id" type="lemma">stack_eq_length_trans</span></a> <span class="id" type="keyword">with</span> (<span class="id" type="var">s'</span>:= <span class="id" type="var">y</span>);<span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Add</span> <span class="id" type="var">Parametric</span> <span class="id" type="var">Relation</span>: <a class="idref" href="environment.html#STORE.stack"><span class="id" type="definition">stack</span></a> <a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">reflexivity</span> <span class="id" type="var">proved</span> <span class="id" type="tactic">by</span> <a class="idref" href="environment.html#STORE.stack_eq_length_refl2"><span class="id" type="lemma">stack_eq_length_refl2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">symmetry</span> <span class="id" type="var">proved</span> <span class="id" type="tactic">by</span> <a class="idref" href="environment.html#STORE.stack_eq_length_sym"><span class="id" type="lemma">stack_eq_length_sym</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">transitivity</span> <span class="id" type="var">proved</span> <span class="id" type="tactic">by</span> <a class="idref" href="environment.html#STORE.stack_eq_length_trans2"><span class="id" type="lemma">stack_eq_length_trans2</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">as</span> <span class="id" type="var">stack_eq_length_equiv_rel</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Add</span> <span class="id" type="var">Parametric</span> <span class="id" type="var">Morphism</span>: (@<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#app"><span class="id" type="abbreviation">List.app</span></a> <a class="idref" href="environment.html#STORE.frame"><span class="id" type="definition">frame</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">with</span> <span class="id" type="var">signature</span> <a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Classes.Morphisms.html#ProperNotations.:signature_scope:x_'==>'_x"><span class="id" type="notation">==&gt;</span></a> <a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Classes.Morphisms.html#ProperNotations.:signature_scope:x_'==>'_x"><span class="id" type="notation">==&gt;</span></a> <a class="idref" href="environment.html#STORE.stack_eq_length"><span class="id" type="inductive">stack_eq_length</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="keyword">as</span> <span class="id" type="var">app_morph_stack_eq_length</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">x</span> <span class="id" type="var">y</span> <span class="id" type="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">induction</span> <span class="id" type="var">H</span>;<span class="id" type="tactic">simpl</span>;<span class="id" type="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" type="tactic">constructor</span> 2.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">apply</span> <span class="id" type="var">IHstack_eq_length</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" type="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Lemma</span> <a name="STORE.updateG_length"><span class="id" type="lemma">updateG_length</span></a>: <span class="id" type="keyword">forall</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span> <span class="id" type="var">s'</span>, <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="environment.html#STORE.updateG"><span class="id" type="definition">updateG</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="environment.html#x"><span class="id" type="variable">x</span></a> <a class="idref" href="environment.html#v"><span class="id" type="variable">v</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" type="constructor">Some</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a> -&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> <a class="idref" href="environment.html#s"><span class="id" type="variable">s</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Init.Logic.html#:type_scope:x_'='_x"><span class="id" type="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.4pl4/stdlib/Coq.Lists.List.html#length"><span class="id" type="abbreviation">List.length</span></a> <a class="idref" href="environment.html#s'"><span class="id" type="variable">s'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="tactic">intros</span> <span class="id" type="var">s</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" type="var">functional</span> <span class="id" type="tactic">induction</span> <a class="idref" href="environment.html#STORE.updateG"><span class="id" type="definition">updateG</span></a> <span class="id" type="var">s</span> <span class="id" type="var">x</span> <span class="id" type="var">v</span>;<span class="id" type="tactic">simpl</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;; <span class="id" type="tactic">intros</span> <span class="id" type="var">updateds</span> <span class="id" type="var">heq</span>; <span class="id" type="tactic">inversion</span> <span class="id" type="var">heq</span>;<span class="id" type="tactic">clear</span> <span class="id" type="var">heq</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;; <span class="id" type="tactic">subst</span>;<span class="id" type="tactic">simpl</span>;<span class="id" type="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" type="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" type="keyword">End</span> <a class="idref" href="environment.html#"><span class="id" type="module">STORE</span></a>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
