@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>rt</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">rt</h1>
+
+<div class="code">
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+<i>AUTHOR</i>
+
+<pre>
+Zhi Zhang
+Department of Computer and Information Sciences
+Kansas State University
+zhangzhi@ksu.edu
+</pre>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Bool.Bool.html#"><span class="id" title="library">Coq.Bool.Bool</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Lists.List.html#"><span class="id" title="library">Coq.Lists.List</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab27"></a><h1 class="section">Run-Time Checks</h1>
+ a subset of run-time checks to be verified 
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> Do_Division_Check
+
+<div class="paragraph"> </div>
+
+       Check that the second operand of the the division, mod or rem 
+       operator is not zero.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> Do_Overflow_Check
+
+<div class="paragraph"> </div>
+
+       Check that the result of the given arithmetic operation is within 
+       the bounds of the base type.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> Do_Range_Check
+
+<div class="paragraph"> </div>
+
+       Check that the given value is within the range of the expected scalar 
+       subtype.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> Do_Range_Check_On_Return
+
+<div class="paragraph"> </div>
+
+       for a procedure call, if it's required a range check for its input variables
+       during copy_in procedure, then the range check flag should be set for its input
+       arguments; but if it's required a range check for its output variables during
+       copy_out procedure, then the range check flag should be set for its output 
+       parameters instead of its output arguments, but it's unreasonable to set the
+       range check on formal parameters of the called procedure as it maybe called in
+       different context where there are no range check requirement. So here we introduce
+       a new check flag Do_Range_Check_On_CopyOut for the output parameters but it's set
+       on the output arguments.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li> Undefined_Check
+
+<div class="paragraph"> </div>
+
+       for any run-time checks extracted from gnat2xml other than Do_Division_Check, 
+       Do_Overflow_Check and Do_Range_Check, they are represented by Undefined_Check.
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+
+<div class="paragraph"> </div>
+
+      Do_Range_Check (Flag9-Sem) (reference: sinfo.ads)
+
+<div class="paragraph"> </div>
+
+         This flag is set on an expression which appears in a context where a
+         range check is required. The target type is clear from the context.
+         The contexts in which this flag can appear are the following:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li>     Right side of an assignment. In this case the target type is
+         taken from the left side of the assignment, which is referenced
+         by the Name of the N_Assignment_Statement node.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li>     Subscript expressions in an indexed component. In this case the
+         target type is determined from the type of the array, which is
+         referenced by the Prefix of the N_Indexed_Component node.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li>     Argument expression for a parameter, appearing either directly in
+         the Parameter_Associations list of a call or as the Expression of an
+         N_Parameter_Association node that appears in this list. In either
+         case, the check is against the type of the formal. Note that the
+         flag is relevant only in IN and IN OUT parameters, and will be
+         ignored for OUT parameters, where no check is required in the call,
+         and if a check is required on the return, it is generated explicitly
+         with a type conversion.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li>     Initialization expression for the initial value in an object
+         declaration. In this case the Do_Range_Check flag is set on
+         the initialization expression, and the check is against the
+         range of the type of the object being declared. This includes the
+         cases of expressions providing default discriminant values, and
+         expressions used to initialize record components.
+
+<div class="paragraph"> </div>
+
+
+</li>
+<li>     The expression of a type conversion. In this case the range check is
+         against the target type of the conversion. See also the use of
+         Do_Overflow_Check on a type conversion. The distinction is that the
+         overflow check protects against a value that is outside the range of
+         the target base type, whereas a range check checks that the
+         resulting value (which is a value of the base type of the target
+         type), satisfies the range constraint of the target type.
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+ checks that are needed to be verified at run time: 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="check_flag"><span class="id" title="inductive">check_flag</span></a>: <span class="id" title="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="DivCheck"><span class="id" title="constructor">DivCheck</span></a>         : <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="OverflowCheck"><span class="id" title="constructor">OverflowCheck</span></a>         : <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="RangeCheck"><span class="id" title="constructor">RangeCheck</span></a>            : <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="RangeCheckOnReturn"><span class="id" title="constructor">RangeCheckOnReturn</span></a> : <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="UndefinedCheck"><span class="id" title="constructor">UndefinedCheck</span></a>           : <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+For an expression or statement, there may exists a list of checks 
+    enforced on it, for example, for division expression, both
+    division by zero and overflow checks are needed to be performed;
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="check_flags"><span class="id" title="definition">check_flags</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+For an expression e used as index of an array, e.g. a(e), then overflow check is called 
+    the interior run-time checks for e, and range check for the value of e is enforced by the 
+    array, so it's called exterior run-time checks; in our formalization for SPARK semantics,
+    we distinguish these two different kind of checks, as they performed at diferrent stages,
+    one is run-time checked when e is evaluated, and the other is run-time checked when the 
+    value of e is used as index of array a;
+ 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="interior_checks"><span class="id" title="definition">interior_checks</span></a> := <a class="idref" href="rt.html#check_flags"><span class="id" title="definition">check_flags</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="exterior_checks"><span class="id" title="definition">exterior_checks</span></a> := <a class="idref" href="rt.html#check_flags"><span class="id" title="definition">check_flags</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab28"></a><h1 class="section">Run-Time Checks Subset</h1>
+ these functions will be used to verify the run-time check flags
+    that are generated by GNAT front end against the expected 
+    run-time check flags as required by the semantics of SPARK 
+    programming language;
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Function</span> <span class="id" title="var">beq_check_flag</span> (<span class="id" title="var">ck1</span> <span class="id" title="var">ck2</span>: <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt.html#ck1"><span class="id" title="variable">ck1</span></a>, <a class="idref" href="rt.html#ck2"><span class="id" title="variable">ck2</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="rt.html#DivCheck"><span class="id" title="constructor">DivCheck</span></a>, <a class="idref" href="rt.html#DivCheck"><span class="id" title="constructor">DivCheck</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="rt.html#OverflowCheck"><span class="id" title="constructor">OverflowCheck</span></a>, <a class="idref" href="rt.html#OverflowCheck"><span class="id" title="constructor">OverflowCheck</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="rt.html#RangeCheck"><span class="id" title="constructor">RangeCheck</span></a>,    <a class="idref" href="rt.html#RangeCheck"><span class="id" title="constructor">RangeCheck</span></a>    =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="rt.html#RangeCheckOnReturn"><span class="id" title="constructor">RangeCheckOnReturn</span></a>, <a class="idref" href="rt.html#RangeCheckOnReturn"><span class="id" title="constructor">RangeCheckOnReturn</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="rt.html#UndefinedCheck"><span class="id" title="constructor">UndefinedCheck</span></a>, <a class="idref" href="rt.html#UndefinedCheck"><span class="id" title="constructor">UndefinedCheck</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">_</span>, <span class="id" title="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Function</span> <span class="id" title="var">element_of</span> (<span class="id" title="var">a</span>: <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a>) (<span class="id" title="var">ls</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="rt.html#check_flag"><span class="id" title="inductive">check_flag</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt.html#ls"><span class="id" title="variable">ls</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;| (<span class="id" title="var">a'</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <span class="id" title="var">ls'</span>) =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">if</span> <a class="idref" href="rt.html#beq_check_flag"><span class="id" title="definition">beq_check_flag</span></a> <a class="idref" href="rt.html#a"><span class="id" title="variable">a</span></a> <span class="id" title="var">a'</span> <span class="id" title="keyword">then</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">else</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt.html#element_of"><span class="id" title="definition">element_of</span></a> <a class="idref" href="rt.html#a"><span class="id" title="variable">a</span></a> <span class="id" title="var">ls'</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Function</span> <span class="id" title="var">subset_of</span> (<span class="id" title="var">cks1</span> <span class="id" title="var">cks2</span>: <a class="idref" href="rt.html#check_flags"><span class="id" title="definition">check_flags</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt.html#cks1"><span class="id" title="variable">cks1</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">ck</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <span class="id" title="var">cks1'</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">if</span> <a class="idref" href="rt.html#element_of"><span class="id" title="definition">element_of</span></a> <span class="id" title="var">ck</span> <a class="idref" href="rt.html#cks2"><span class="id" title="variable">cks2</span></a> <span class="id" title="keyword">then</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt.html#subset_of"><span class="id" title="definition">subset_of</span></a> <span class="id" title="var">cks1'</span> <a class="idref" href="rt.html#cks2"><span class="id" title="variable">cks2</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">else</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Function</span> <span class="id" title="var">beq_check_flags</span> (<span class="id" title="var">cks1</span> <span class="id" title="var">cks2</span>: <a class="idref" href="rt.html#check_flags"><span class="id" title="definition">check_flags</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#49ac24efa716d8b0ee8943bc1d1769a9"><span class="id" title="notation">(</span></a><a class="idref" href="rt.html#subset_of"><span class="id" title="definition">subset_of</span></a> <a class="idref" href="rt.html#cks1"><span class="id" title="variable">cks1</span></a> <a class="idref" href="rt.html#cks2"><span class="id" title="variable">cks2</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#49ac24efa716d8b0ee8943bc1d1769a9"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#49ac24efa716d8b0ee8943bc1d1769a9"><span class="id" title="notation">&amp;&amp;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#49ac24efa716d8b0ee8943bc1d1769a9"><span class="id" title="notation">(</span></a><a class="idref" href="rt.html#subset_of"><span class="id" title="definition">subset_of</span></a> <a class="idref" href="rt.html#cks2"><span class="id" title="variable">cks2</span></a> <a class="idref" href="rt.html#cks1"><span class="id" title="variable">cks1</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#49ac24efa716d8b0ee8943bc1d1769a9"><span class="id" title="notation">)</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>ast_basics</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">ast_basics</h1>
+
+<div class="code">
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+<i>AUTHOR</i>
+
+<pre>
+Zhi Zhang
+Department of Computer and Information Sciences
+Kansas State University
+zhangzhi@ksu.edu
+</pre>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.ZArith.ZArith.html#"><span class="id" title="library">ZArith</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Lists.List.html#"><span class="id" title="library">Coq.Lists.List</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Bool.Bool.html#"><span class="id" title="library">Coq.Bool.Bool</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="CpdtTactics.html#"><span class="id" title="library">CpdtTactics</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="list_util.html#"><span class="id" title="library">list_util</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+This file defines some basic data types and operations used for
+    formalization of SPARK 2014 language;
+
+<div class="paragraph"> </div>
+
+<a name="lab3"></a><h1 class="section">Identifiers</h1>
+
+<div class="paragraph"> </div>
+
+ Distinct AST number labeled for each AST node; it's not a part  
+    of the SPARK 2014 language, but it's introduced to facilitate the 
+    formalization of the language and error debugging. For example, the
+    AST number can be used to map the error information back to the SPARK 
+    source code, and it also can be used to map each ast node to its type 
+    information;
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="astnum"><span class="id" title="definition">astnum</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+In CompCert, non-negative values are used to represent identifiers, 
+    we take the same way to represent identifiers/names as natural numbers;
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> idnum:   represent declared variables;
+
+</li>
+<li> procnum: represent declared procedure names;
+
+</li>
+<li> pkgnum: represent package names;
+
+</li>
+<li> typenum: represent declared type names;
+
+</li>
+</ul>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="idnum"><span class="id" title="definition">idnum</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="procnum"><span class="id" title="definition">procnum</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="pkgnum"><span class="id" title="definition">pkgnum</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="typenum"><span class="id" title="definition">typenum</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="arrindex"><span class="id" title="definition">arrindex</span></a> := <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" title="inductive">Z</span></a>. 
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab4"></a><h1 class="section">Data Types</h1>
+ in SPARK, data types can be boolean, integer, subtype, array/record 
+    types and others; typenum denotes the subtype names or array/record 
+    types names;
+
+<div class="paragraph"> </div>
+
+    In SPARK, subtype can be declared in the following ways:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> subtype declaration,      e.g. subtype MyInt is Integer range 0 .. 5;
+
+</li>
+<li> derived type declaration, e.g. type MyInt is new Integer range 1 .. 100;
+
+</li>
+<li> integer type declaration, e.g. type MyInt is range 1 .. 10;
+
+</li>
+</ul>
+    Note: now we only consider the 32-bit singed integer type for 
+    our SPARK subset language, and model it with Integer; Actually,
+    SPARK has various integer types, we can extend our types by 
+    adding more SPARK types here and adding its corresponding value
+    definition in values.v;
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="type"><span class="id" title="inductive">type</span></a>: <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Boolean"><span class="id" title="constructor">Boolean</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Integer"><span class="id" title="constructor">Integer</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Subtype"><span class="id" title="constructor">Subtype</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#typenum"><span class="id" title="definition">typenum</span></a>)      <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Derived_Type"><span class="id" title="constructor">Derived_Type</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#typenum"><span class="id" title="definition">typenum</span></a>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Integer_Type"><span class="id" title="constructor">Integer_Type</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#typenum"><span class="id" title="definition">typenum</span></a>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Array_Type"><span class="id" title="constructor">Array_Type</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#typenum"><span class="id" title="definition">typenum</span></a>)     <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Record_Type"><span class="id" title="constructor">Record_Type</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#typenum"><span class="id" title="definition">typenum</span></a>)    .<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab5"></a><h1 class="section">In/Out Mode</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="mode"><span class="id" title="inductive">mode</span></a>: <span class="id" title="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="In"><span class="id" title="constructor">In</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Out"><span class="id" title="constructor">Out</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="In_Out"><span class="id" title="constructor">In_Out</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab6"></a><h1 class="section">Operators</h1>
+
+<div class="paragraph"> </div>
+
+ unary and binary operators 
+</div>
+<div class="code">
+<span class="id" title="keyword">Inductive</span> <a name="unary_operator"><span class="id" title="inductive">unary_operator</span></a>: <span class="id" title="keyword">Type</span> :=      <br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Unary_Minus"><span class="id" title="constructor">Unary_Minus</span></a>: <a class="idref" href="ast_basics.html#unary_operator"><span class="id" title="inductive">unary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Not"><span class="id" title="constructor">Not</span></a>: <a class="idref" href="ast_basics.html#unary_operator"><span class="id" title="inductive">unary_operator</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="binary_operator"><span class="id" title="inductive">binary_operator</span></a>: <span class="id" title="keyword">Type</span> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="And"><span class="id" title="constructor">And</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Or"><span class="id" title="constructor">Or</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Equal"><span class="id" title="constructor">Equal</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Not_Equal"><span class="id" title="constructor">Not_Equal</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Less_Than"><span class="id" title="constructor">Less_Than</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Less_Than_Or_Equal"><span class="id" title="constructor">Less_Than_Or_Equal</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Greater_Than"><span class="id" title="constructor">Greater_Than</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Greater_Than_Or_Equal"><span class="id" title="constructor">Greater_Than_Or_Equal</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Plus"><span class="id" title="constructor">Plus</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Minus"><span class="id" title="constructor">Minus</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Multiply"><span class="id" title="constructor">Multiply</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Divide"><span class="id" title="constructor">Divide</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Modulus"><span class="id" title="constructor">Modulus</span></a>: <a class="idref" href="ast_basics.html#binary_operator"><span class="id" title="inductive">binary_operator</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab7"></a><h1 class="section">Literals</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="literal"><span class="id" title="inductive">literal</span></a>: <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Integer_Literal"><span class="id" title="constructor">Integer_Literal</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Numbers.BinNums.html#Z"><span class="id" title="inductive">Z</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="ast_basics.html#literal"><span class="id" title="inductive">literal</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a name="Boolean_Literal"><span class="id" title="constructor">Boolean_Literal</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="ast_basics.html#literal"><span class="id" title="inductive">literal</span></a> .<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab8"></a><h1 class="section">Auxiliary Functions</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <a name="LB_AuxiliaryFunctions"><span class="id" title="section">LB_AuxiliaryFunctions</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+it wll be used to determine whether to put range check 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="is_range_constrainted_type"><span class="id" title="definition">is_range_constrainted_type</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#type"><span class="id" title="inductive">type</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="ast_basics.html#t"><span class="id" title="variable">t</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Subtype"><span class="id" title="constructor">Subtype</span></a> <span class="id" title="var">_</span>      =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Derived_Type"><span class="id" title="constructor">Derived_Type</span></a> <span class="id" title="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Integer_Type"><span class="id" title="constructor">Integer_Type</span></a> <span class="id" title="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span>              =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="subtype_num"><span class="id" title="definition">subtype_num</span></a> (<span class="id" title="var">t</span>: <a class="idref" href="ast_basics.html#type"><span class="id" title="inductive">type</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="ast_basics.html#typenum"><span class="id" title="definition">typenum</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="ast_basics.html#t"><span class="id" title="variable">t</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Subtype"><span class="id" title="constructor">Subtype</span></a> <span class="id" title="var">tn</span>      =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Derived_Type"><span class="id" title="constructor">Derived_Type</span></a> <span class="id" title="var">tn</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Integer_Type"><span class="id" title="constructor">Integer_Type</span></a> <span class="id" title="var">tn</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">tn</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span>               =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="beq_type"><span class="id" title="definition">beq_type</span></a> (<span class="id" title="var">t1</span> <span class="id" title="var">t2</span>: <a class="idref" href="ast_basics.html#type"><span class="id" title="inductive">type</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="ast_basics.html#t1"><span class="id" title="variable">t1</span></a>, <a class="idref" href="ast_basics.html#t2"><span class="id" title="variable">t2</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Boolean"><span class="id" title="constructor">Boolean</span></a>, <a class="idref" href="ast_basics.html#Boolean"><span class="id" title="constructor">Boolean</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Integer"><span class="id" title="constructor">Integer</span></a>, <a class="idref" href="ast_basics.html#Integer"><span class="id" title="constructor">Integer</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Subtype"><span class="id" title="constructor">Subtype</span></a> <span class="id" title="var">t1'</span>, <a class="idref" href="ast_basics.html#Subtype"><span class="id" title="constructor">Subtype</span></a> <span class="id" title="var">t2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" title="abbreviation">beq_nat</span></a> <span class="id" title="var">t1'</span> <span class="id" title="var">t2'</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Derived_Type"><span class="id" title="constructor">Derived_Type</span></a> <span class="id" title="var">t1'</span>, <a class="idref" href="ast_basics.html#Derived_Type"><span class="id" title="constructor">Derived_Type</span></a> <span class="id" title="var">t2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" title="abbreviation">beq_nat</span></a> <span class="id" title="var">t1'</span> <span class="id" title="var">t2'</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Integer_Type"><span class="id" title="constructor">Integer_Type</span></a> <span class="id" title="var">t1'</span>, <a class="idref" href="ast_basics.html#Integer_Type"><span class="id" title="constructor">Integer_Type</span></a> <span class="id" title="var">t2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" title="abbreviation">beq_nat</span></a> <span class="id" title="var">t1'</span> <span class="id" title="var">t2'</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Array_Type"><span class="id" title="constructor">Array_Type</span></a> <span class="id" title="var">t1'</span>, <a class="idref" href="ast_basics.html#Array_Type"><span class="id" title="constructor">Array_Type</span></a> <span class="id" title="var">t2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" title="abbreviation">beq_nat</span></a> <span class="id" title="var">t1'</span> <span class="id" title="var">t2'</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Record_Type"><span class="id" title="constructor">Record_Type</span></a> <span class="id" title="var">t1'</span>, <a class="idref" href="ast_basics.html#Record_Type"><span class="id" title="constructor">Record_Type</span></a> <span class="id" title="var">t2'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat"><span class="id" title="abbreviation">beq_nat</span></a> <span class="id" title="var">t1'</span> <span class="id" title="var">t2'</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span>, <span class="id" title="var">_</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="is_in_mode"><span class="id" title="definition">is_in_mode</span></a> (<span class="id" title="var">x</span>: <a class="idref" href="ast_basics.html#mode"><span class="id" title="inductive">mode</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="ast_basics.html#x"><span class="id" title="variable">x</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#In"><span class="id" title="constructor">In</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span>  =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="is_out_mode"><span class="id" title="definition">is_out_mode</span></a> (<span class="id" title="var">x</span>: <a class="idref" href="ast_basics.html#mode"><span class="id" title="inductive">mode</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="ast_basics.html#x"><span class="id" title="variable">x</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#Out"><span class="id" title="constructor">Out</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span>   =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="is_in_out_mode"><span class="id" title="definition">is_in_out_mode</span></a> (<span class="id" title="var">x</span>: <a class="idref" href="ast_basics.html#mode"><span class="id" title="inductive">mode</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="ast_basics.html#x"><span class="id" title="variable">x</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_basics.html#In_Out"><span class="id" title="constructor">In_Out</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span>      =&gt; <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="beq_type_refl"><span class="id" title="lemma">beq_type_refl</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">t</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="ast_basics.html#beq_type"><span class="id" title="definition">beq_type</span></a> <a class="idref" href="ast_basics.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="ast_basics.html#t"><span class="id" title="variable">t</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>; <span class="id" title="tactic">destruct</span> <span class="id" title="var">t</span>; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">smack</span>; <span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat_refl"><span class="id" title="lemma">beq_nat_refl</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="beq_type_eq"><span class="id" title="lemma">beq_type_eq</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">t1</span> <span class="id" title="var">t2</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="ast_basics.html#beq_type"><span class="id" title="definition">beq_type</span></a> <a class="idref" href="ast_basics.html#t1"><span class="id" title="variable">t1</span></a> <a class="idref" href="ast_basics.html#t2"><span class="id" title="variable">t2</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="ast_basics.html#t1"><span class="id" title="variable">t1</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="ast_basics.html#t2"><span class="id" title="variable">t2</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>; <span class="id" title="tactic">destruct</span> <span class="id" title="var">t1</span>, <span class="id" title="var">t2</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Arith.EqNat.html#beq_nat_eq"><span class="id" title="definition">beq_nat_eq</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="ast_basics.html#LB_AuxiliaryFunctions"><span class="id" title="section">LB_AuxiliaryFunctions</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

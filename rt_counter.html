@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>rt_counter</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">rt_counter</h1>
+
+<div class="code">
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+<i>AUTHOR</i>
+
+<pre>
+Zhi Zhang
+Department of Computer and Information Sciences
+Kansas State University
+zhangzhi@ksu.edu
+</pre>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="rt_gen.html#"><span class="id" title="library">rt_gen</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab287"></a><h1 class="section">Count Number of Run-Time Checks</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <a name="Check_Count"><span class="id" title="section">Check_Count</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Record</span> <a name="cks_infor_t"><span class="id" title="record">cks_infor_t</span></a>: <span class="id" title="keyword">Type</span> := <a name="cks_infor"><span class="id" title="constructor">cks_infor</span></a> {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="num_of_cks"><span class="id" title="projection">num_of_cks</span></a>  : <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="division_cks"><span class="id" title="projection">division_cks</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="overflow_cks"><span class="id" title="projection">overflow_cks</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a name="range_cks"><span class="id" title="projection">range_cks</span></a>   : <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a><br/>
+&nbsp;&nbsp;}.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">conj_cks_infor</span> (<span class="id" title="var">x1</span> <span class="id" title="var">x2</span> : <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> := <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#x1"><span class="id" title="variable">x1</span></a>, <a class="idref" href="rt_counter.html#x2"><span class="id" title="variable">x2</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> <span class="id" title="var">cksNum</span> <span class="id" title="var">d</span> <span class="id" title="var">o</span> <span class="id" title="var">r</span>, <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> <span class="id" title="var">cksNum1</span> <span class="id" title="var">d1</span> <span class="id" title="var">o1</span> <span class="id" title="var">r1</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> (<span class="id" title="var">cksNum</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <span class="id" title="var">cksNum1</span>) (<span class="id" title="var">d</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <span class="id" title="var">d1</span>) (<span class="id" title="var">o</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <span class="id" title="var">o1</span>) (<span class="id" title="var">r</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <span class="id" title="var">r1</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">compute_cks_infor</span> (<span class="id" title="var">cks</span>: <a class="idref" href="rt.html#check_flags"><span class="id" title="definition">check_flags</span></a>) : <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#cks"><span class="id" title="variable">cks</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">ck</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <span class="id" title="var">cks'</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">r</span> := <a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> <span class="id" title="var">cks'</span> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="var">ck</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="rt.html#DivCheck"><span class="id" title="constructor">DivCheck</span></a> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#num_of_cks"><span class="id" title="projection">num_of_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1) (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#division_cks"><span class="id" title="projection">division_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#overflow_cks"><span class="id" title="projection">overflow_cks</span></a>) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#range_cks"><span class="id" title="projection">range_cks</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="rt.html#OverflowCheck"><span class="id" title="constructor">OverflowCheck</span></a> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#num_of_cks"><span class="id" title="projection">num_of_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#division_cks"><span class="id" title="projection">division_cks</span></a>) (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#overflow_cks"><span class="id" title="projection">overflow_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#range_cks"><span class="id" title="projection">range_cks</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="rt.html#RangeCheck"><span class="id" title="constructor">RangeCheck</span></a>    =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#num_of_cks"><span class="id" title="projection">num_of_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#division_cks"><span class="id" title="projection">division_cks</span></a>) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#overflow_cks"><span class="id" title="projection">overflow_cks</span></a>) (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#range_cks"><span class="id" title="projection">range_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="rt.html#RangeCheckOnReturn"><span class="id" title="constructor">RangeCheckOnReturn</span></a> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#num_of_cks"><span class="id" title="projection">num_of_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#division_cks"><span class="id" title="projection">division_cks</span></a>) <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#overflow_cks"><span class="id" title="projection">overflow_cks</span></a>) (<a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a>.(<a class="idref" href="rt_counter.html#range_cks"><span class="id" title="projection">range_cks</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> 1)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <a class="idref" href="rt_counter.html#r"><span class="id" title="variable">r</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab288"></a><h2 class="section">Check Counter for Expression</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_exp_check_flags</span> (<span class="id" title="var">e</span>: <a class="idref" href="ast_rt.html#expRT"><span class="id" title="inductive">expRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#e"><span class="id" title="variable">e</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#LiteralRT"><span class="id" title="constructor">LiteralRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">l</span> <span class="id" title="var">in_cks</span> <span class="id" title="var">ex_cks</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> (<span class="id" title="var">in_cks</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <span class="id" title="var">ex_cks</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#NameRT"><span class="id" title="constructor">NameRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">nm</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#count_name_check_flags"><span class="id" title="definition">count_name_check_flags</span></a> <span class="id" title="var">nm</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#BinOpRT"><span class="id" title="constructor">BinOpRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">op</span> <span class="id" title="var">e1</span> <span class="id" title="var">e2</span> <span class="id" title="var">in_cks</span> <span class="id" title="var">ex_cks</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> (<span class="id" title="var">in_cks</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <span class="id" title="var">ex_cks</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e1</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#UnOpRT"><span class="id" title="constructor">UnOpRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">op</span> <span class="id" title="var">e</span> <span class="id" title="var">in_cks</span> <span class="id" title="var">ex_cks</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> (<span class="id" title="var">in_cks</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <span class="id" title="var">ex_cks</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <a class="idref" href="rt_counter.html#e"><span class="id" title="variable">e</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+<br/>
+&nbsp;&nbsp;</div>
+
+<div class="doc">
+<a name="lab289"></a><h2 class="section">Check Counter for Name</h2>
+
+</div>
+<div class="code">
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">with</span> <span class="id" title="var">count_name_check_flags</span> (<span class="id" title="var">n</span>: <a class="idref" href="ast_rt.html#nameRT"><span class="id" title="inductive">nameRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#n"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#IdentifierRT"><span class="id" title="constructor">IdentifierRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">ex_cks</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> <span class="id" title="var">ex_cks</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#IndexedComponentRT"><span class="id" title="constructor">IndexedComponentRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">e</span> <span class="id" title="var">ex_cks</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> <span class="id" title="var">ex_cks</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_name_check_flags"><span class="id" title="definition">count_name_check_flags</span></a> <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#SelectedComponentRT"><span class="id" title="constructor">SelectedComponentRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">f</span> <span class="id" title="var">ex_cks</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#compute_cks_infor"><span class="id" title="definition">compute_cks_infor</span></a> <span class="id" title="var">ex_cks</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_name_check_flags"><span class="id" title="definition">count_name_check_flags</span></a> <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_args_check_flags</span> (<span class="id" title="var">le</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="ast_rt.html#expRT"><span class="id" title="inductive">expRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#le"><span class="id" title="variable">le</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| (<span class="id" title="var">e1</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <span class="id" title="var">le1'</span>) =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e1</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_args_check_flags"><span class="id" title="definition">count_args_check_flags</span></a> <span class="id" title="var">le1'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab290"></a><h2 class="section">Check Counter for Statement</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_stmt_check_flags</span> (<span class="id" title="var">c</span>: <a class="idref" href="ast_rt.html#stmtRT"><span class="id" title="inductive">stmtRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#c"><span class="id" title="variable">c</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#NullRT"><span class="id" title="constructor">NullRT</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#AssignRT"><span class="id" title="constructor">AssignRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">e</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_name_check_flags"><span class="id" title="definition">count_name_check_flags</span></a> <span class="id" title="var">x</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#IfRT"><span class="id" title="constructor">IfRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">e</span> <span class="id" title="var">c1</span> <span class="id" title="var">c2</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_stmt_check_flags"><span class="id" title="definition">count_stmt_check_flags</span></a> <span class="id" title="var">c1</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_stmt_check_flags"><span class="id" title="definition">count_stmt_check_flags</span></a> <span class="id" title="var">c2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#WhileRT"><span class="id" title="constructor">WhileRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">e</span> <span class="id" title="var">c</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_stmt_check_flags"><span class="id" title="definition">count_stmt_check_flags</span></a> <a class="idref" href="rt_counter.html#c"><span class="id" title="variable">c</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#CallRT"><span class="id" title="constructor">CallRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">pn</span> <span class="id" title="var">p</span> <span class="id" title="var">args</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_args_check_flags"><span class="id" title="definition">count_args_check_flags</span></a> <span class="id" title="var">args</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#SeqRT"><span class="id" title="constructor">SeqRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">c1</span> <span class="id" title="var">c2</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_stmt_check_flags"><span class="id" title="definition">count_stmt_check_flags</span></a> <span class="id" title="var">c1</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_stmt_check_flags"><span class="id" title="definition">count_stmt_check_flags</span></a> <span class="id" title="var">c2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_type_decl_check_flags</span> (<span class="id" title="var">t</span>: <a class="idref" href="ast_rt.html#typeDeclRT"><span class="id" title="inductive">typeDeclRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#t"><span class="id" title="variable">t</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#SubtypeDeclRT"><span class="id" title="constructor">SubtypeDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">tn</span> <span class="id" title="var">t</span> (<a class="idref" href="ast_rt.html#RangeRT"><span class="id" title="constructor">RangeRT</span></a> <span class="id" title="var">l</span> <span class="id" title="var">u</span>) =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#DerivedTypeDeclRT"><span class="id" title="constructor">DerivedTypeDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">tn</span> <span class="id" title="var">t</span> (<a class="idref" href="ast_rt.html#RangeRT"><span class="id" title="constructor">RangeRT</span></a> <span class="id" title="var">l</span> <span class="id" title="var">u</span>) =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#IntegerTypeDeclRT"><span class="id" title="constructor">IntegerTypeDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">tn</span> (<a class="idref" href="ast_rt.html#RangeRT"><span class="id" title="constructor">RangeRT</span></a> <span class="id" title="var">l</span> <span class="id" title="var">u</span>) =&gt;  <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#ArrayTypeDeclRT"><span class="id" title="constructor">ArrayTypeDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">tn</span> <span class="id" title="var">tm</span> <span class="id" title="var">t</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#RecordTypeDeclRT"><span class="id" title="constructor">RecordTypeDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">tn</span> <span class="id" title="var">fs</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_object_decl_check_flags</span> (<span class="id" title="var">o</span>: <a class="idref" href="ast_rt.html#objDeclRT"><span class="id" title="record">objDeclRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#o"><span class="id" title="variable">o</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#mkobjDeclRT"><span class="id" title="constructor">mkobjDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">t</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#mkobjDeclRT"><span class="id" title="constructor">mkobjDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">t</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">e</span>) =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#count_exp_check_flags"><span class="id" title="definition">count_exp_check_flags</span></a> <span class="id" title="var">e</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_object_decls_check_flags</span> (<span class="id" title="var">lo</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="ast_rt.html#objDeclRT"><span class="id" title="record">objDeclRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#lo"><span class="id" title="variable">lo</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">o1</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <span class="id" title="var">lo1'</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_object_decl_check_flags"><span class="id" title="definition">count_object_decl_check_flags</span></a> <span class="id" title="var">o1</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_object_decls_check_flags"><span class="id" title="definition">count_object_decls_check_flags</span></a> <span class="id" title="var">lo1'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_param_spec_check_flags</span> (<span class="id" title="var">param</span>: <a class="idref" href="ast_rt.html#paramSpecRT"><span class="id" title="record">paramSpecRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#param"><span class="id" title="variable">param</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#mkparamSpecRT"><span class="id" title="constructor">mkparamSpecRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">m</span> <span class="id" title="var">t</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_param_specs_check_flags</span> (<span class="id" title="var">lparam</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="ast_rt.html#paramSpecRT"><span class="id" title="record">paramSpecRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#lparam"><span class="id" title="variable">lparam</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">param1</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <span class="id" title="var">lparam1'</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_param_spec_check_flags"><span class="id" title="definition">count_param_spec_check_flags</span></a> <span class="id" title="var">param1</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_param_specs_check_flags"><span class="id" title="definition">count_param_specs_check_flags</span></a> <span class="id" title="var">lparam1'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab291"></a><h2 class="section">Check Counter for Declaration</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_declaration_check_flags</span> (<span class="id" title="var">d</span>: <a class="idref" href="ast_rt.html#declRT"><span class="id" title="inductive">declRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#d"><span class="id" title="variable">d</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#NullDeclRT"><span class="id" title="constructor">NullDeclRT</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#TypeDeclRT"><span class="id" title="constructor">TypeDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">t</span> =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#count_type_decl_check_flags"><span class="id" title="definition">count_type_decl_check_flags</span></a> <span class="id" title="var">t</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#ObjDeclRT"><span class="id" title="constructor">ObjDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">o</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#count_object_decl_check_flags"><span class="id" title="definition">count_object_decl_check_flags</span></a> <span class="id" title="var">o</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#ProcBodyDeclRT"><span class="id" title="constructor">ProcBodyDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">p</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#count_procedure_body_check_flags"><span class="id" title="definition">count_procedure_body_check_flags</span></a> <span class="id" title="var">p</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#SeqDeclRT"><span class="id" title="constructor">SeqDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">d1</span> <span class="id" title="var">d2</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_declaration_check_flags"><span class="id" title="definition">count_declaration_check_flags</span></a> <span class="id" title="var">d1</span>) (<a class="idref" href="rt_counter.html#count_declaration_check_flags"><span class="id" title="definition">count_declaration_check_flags</span></a> <span class="id" title="var">d2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+<br/>
+&nbsp;&nbsp;</div>
+
+<div class="doc">
+<a name="lab292"></a><h2 class="section">Check Counter for Procedure</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">with</span> <span class="id" title="var">count_procedure_body_check_flags</span> (<span class="id" title="var">p</span>: <a class="idref" href="ast_rt.html#procBodyDeclRT"><span class="id" title="inductive">procBodyDeclRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="ast_rt.html#mkprocBodyDeclRT"><span class="id" title="constructor">mkprocBodyDeclRT</span></a> <span class="id" title="var">n</span> <span class="id" title="var">p</span> <span class="id" title="var">params</span> <span class="id" title="var">decls</span> <span class="id" title="var">stmt</span> =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> (<a class="idref" href="rt_counter.html#count_param_specs_check_flags"><span class="id" title="definition">count_param_specs_check_flags</span></a> <span class="id" title="var">params</span>) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#conj_cks_infor"><span class="id" title="definition">conj_cks_infor</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_declaration_check_flags"><span class="id" title="definition">count_declaration_check_flags</span></a> <span class="id" title="var">decls</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a class="idref" href="rt_counter.html#count_stmt_check_flags"><span class="id" title="definition">count_stmt_check_flags</span></a> <span class="id" title="var">stmt</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab293"></a><h2 class="section">Check Counter for Program</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">count_program_check_flags</span> (<span class="id" title="var">p</span>: <a class="idref" href="ast_rt.html#programRT"><span class="id" title="record">programRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_counter.html#count_declaration_check_flags"><span class="id" title="definition">count_declaration_check_flags</span></a> (<a class="idref" href="rt_counter.html#p"><span class="id" title="variable">p</span></a>.(<a class="idref" href="ast_rt.html#declsRT"><span class="id" title="projection">declsRT</span></a>)).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="count_option_program_check_flags"><span class="id" title="definition">count_option_program_check_flags</span></a> (<span class="id" title="var">x</span>: <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="ast_rt.html#programRT"><span class="id" title="record">programRT</span></a>): <a class="idref" href="rt_counter.html#cks_infor_t"><span class="id" title="record">cks_infor_t</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="rt_counter.html#x"><span class="id" title="variable">x</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">p</span> =&gt; <a class="idref" href="rt_counter.html#count_program_check_flags"><span class="id" title="definition">count_program_check_flags</span></a> <span class="id" title="var">p</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> =&gt; <a class="idref" href="rt_counter.html#cks_infor"><span class="id" title="constructor">cks_infor</span></a> 0 0 0 0<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="rt_counter.html#Check_Count"><span class="id" title="section">Check_Count</span></a>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,779 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>rt_gen_impl_consistent</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">rt_gen_impl_consistent</h1>
+
+<div class="code">
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+<i>AUTHOR</i>
+
+<pre>
+Zhi Zhang
+Department of Computer and Information Sciences
+Kansas State University
+zhangzhi@ksu.edu
+</pre>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="rt_gen_impl.html#"><span class="id" title="library">rt_gen_impl</span></a>.<br/>
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab101"></a><h1 class="section">Semantics Consistency Proof for Run-Time Check Generator</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Scheme</span> <a name="expression_ind"><span class="id" title="definition">expression_ind</span></a> := <span class="id" title="keyword">Induction</span> <span class="id" title="keyword">for</span> <a class="idref" href="ast.html#exp"><span class="id" title="inductive">exp</span></a> <span class="id" title="keyword">Sort</span> <span class="id" title="keyword">Prop</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">with</span> <a name="name_ind"><span class="id" title="definition">name_ind</span></a> := <span class="id" title="keyword">Induction</span> <span class="id" title="keyword">for</span> <a class="idref" href="ast.html#name"><span class="id" title="inductive">name</span></a> <span class="id" title="keyword">Sort</span> <span class="id" title="keyword">Prop</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab102"></a><h1 class="section">Soundness of RT-GEN Implementation</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <a name="Checks_Generator_Implementation_Soundness_Proof"><span class="id" title="section">Checks_Generator_Implementation_Soundness_Proof</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab103"></a><h2 class="section">toExpRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">e</span> <span class="id" title="var">e'</span> <span class="id" title="var">st</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toExpRTImpl"><span class="id" title="definition">toExpRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> (<a class="idref" href="rt_gen_impl_consistent.html#expression_ind"><span class="id" title="definition">expression_ind</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">e</span>: <a class="idref" href="ast.html#exp"><span class="id" title="inductive">exp</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">e'</span> : <a class="idref" href="ast_rt.html#expRT"><span class="id" title="inductive">expRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toExpRTImpl"><span class="id" title="definition">toExpRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a>   <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">n</span>: <a class="idref" href="ast.html#name"><span class="id" title="inductive">name</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">n'</span>: <a class="idref" href="ast_rt.html#nameRT"><span class="id" title="inductive">nameRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toNameRTImpl"><span class="id" title="definition">toNameRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a>   <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">l</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="var">remember</span> ((<a class="idref" href="values.html#min_signed"><span class="id" title="definition">min_signed</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.ZArith.BinInt.html#9d6de4e158d44f421e7d5e9f911ed4b1"><span class="id" title="notation">&lt;=?</span></a> <span class="id" title="var">z</span>)%<span class="id" title="var">Z</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#49ac24efa716d8b0ee8943bc1d1769a9"><span class="id" title="notation">&amp;&amp;</span></a> (<span class="id" title="var">z</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.ZArith.BinInt.html#9d6de4e158d44f421e7d5e9f911ed4b1"><span class="id" title="notation">&lt;=?</span></a> <a class="idref" href="values.html#max_signed"><span class="id" title="definition">max_signed</span></a>)%<span class="id" title="var">Z</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b</span>; <span class="id" title="tactic">destruct</span> <span class="id" title="var">b</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">smack</span>; <span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">smack</span>; <span class="id" title="tactic">constructor</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;] | <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="id" title="tactic">destruct</span> <span class="id" title="var">b</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="id" title="tactic">destruct</span> <span class="id" title="var">u</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;];<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">?</span></a><span class="id" title="var">b</span> |- <a class="idref" href="values.html#in_bound"><span class="id" title="inductive">in_bound</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> ?<span class="id" title="var">b</span>] =&gt; <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">H</span>; <span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab104"></a><h2 class="section">toNameRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toNameRTImpl_soundness"><span class="id" title="lemma">toNameRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">n</span> <span class="id" title="var">n'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toNameRTImpl"><span class="id" title="definition">toNameRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">st</span> <span class="id" title="var">n</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span>; <span class="id" title="var">smack</span>; <span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab105"></a><h2 class="section">toArgsRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toArgsRTImpl_soundness"><span class="id" title="lemma">toArgsRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">params</span> <span class="id" title="var">args</span> <span class="id" title="var">args'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toArgsRTImpl"><span class="id" title="definition">toArgsRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#params"><span class="id" title="variable">params</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args"><span class="id" title="variable">args</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args'"><span class="id" title="variable">args'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toArgsRT"><span class="id" title="inductive">toArgsRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#params"><span class="id" title="variable">params</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args"><span class="id" title="variable">args</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args'"><span class="id" title="variable">args'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">params</span>; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">destruct</span> <span class="id" title="var">args</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">destruct</span> <span class="id" title="var">args</span>; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toArgsRTImpl"><span class="id" title="definition">toArgsRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">params</span> <span class="id" title="var">args</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b1</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="ast.html#parameter_mode"><span class="id" title="projection">parameter_mode</span></a> <span class="id" title="var">a</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b2</span>; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b1</span>, <span class="id" title="var">b2</span>; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="ast_basics.html#is_range_constrainted_type"><span class="id" title="definition">is_range_constrainted_type</span></a> (<a class="idref" href="ast.html#parameter_subtype_mark"><span class="id" title="projection">parameter_subtype_mark</span></a> <span class="id" title="var">a</span>)) <span class="id" title="keyword">as</span> <span class="id" title="var">x</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsInRangeCheck"><span class="id" title="constructor">ToArgsInRangeCheck</span></a> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsIn"><span class="id" title="constructor">ToArgsIn</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="var">smack</span>; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">e</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="symboltable.html#fetch_exp_type"><span class="id" title="definition">fetch_exp_type</span></a> <span class="id" title="var">a0</span> <span class="id" title="var">st</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b3</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b3</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="ast_basics.html#is_range_constrainted_type"><span class="id" title="definition">is_range_constrainted_type</span></a> <span class="id" title="var">t</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b4</span>; <span class="id" title="tactic">destruct</span> <span class="id" title="var">b4</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsOutRangeCheck"><span class="id" title="constructor">ToArgsOutRangeCheck</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span> := <span class="id" title="var">t</span>) |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsOut"><span class="id" title="constructor">ToArgsOut</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span> := <span class="id" title="var">t</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toNameRTImpl_soundness"><span class="id" title="lemma">toNameRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">e</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="ast_basics.html#is_range_constrainted_type"><span class="id" title="definition">is_range_constrainted_type</span></a> (<a class="idref" href="ast.html#parameter_subtype_mark"><span class="id" title="projection">parameter_subtype_mark</span></a> <span class="id" title="var">a</span>)) <span class="id" title="keyword">as</span> <span class="id" title="var">b3</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="symboltable.html#fetch_exp_type"><span class="id" title="definition">fetch_exp_type</span></a> <span class="id" title="var">a0</span> <span class="id" title="var">st</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b4</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b3</span>, <span class="id" title="var">b4</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="ast_basics.html#is_range_constrainted_type"><span class="id" title="definition">is_range_constrainted_type</span></a> <span class="id" title="var">t</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b5</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b5</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsInOutRangeCheck"><span class="id" title="constructor">ToArgsInOutRangeCheck</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span>:=<span class="id" title="var">t</span>) |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsInOutRangeCheckIn"><span class="id" title="constructor">ToArgsInOutRangeCheckIn</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span>:=<span class="id" title="var">t</span>) |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsInOutRangeCheckOut"><span class="id" title="constructor">ToArgsInOutRangeCheckOut</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span>:=<span class="id" title="var">t</span>) |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToArgsInOut"><span class="id" title="constructor">ToArgsInOut</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span>:=<span class="id" title="var">t</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="tactic">auto</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toNameRTImpl_soundness"><span class="id" title="lemma">toNameRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab106"></a><h2 class="section">toStmtRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toStmtRTImpl_soundness"><span class="id" title="lemma">toStmtRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">c</span> <span class="id" title="var">c'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c"><span class="id" title="variable">c</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c'"><span class="id" title="variable">c'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c"><span class="id" title="variable">c</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c'"><span class="id" title="variable">c'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">c</span>; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;- <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;- <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="symboltable.html#fetch_exp_type"><span class="id" title="definition">fetch_exp_type</span></a> (<a class="idref" href="ast.html#name_astnum"><span class="id" title="definition">name_astnum</span></a> <span class="id" title="var">n</span>) <span class="id" title="var">st</span> ) <span class="id" title="keyword">as</span> <span class="id" title="var">b1</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b1</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="ast_basics.html#is_range_constrainted_type"><span class="id" title="definition">is_range_constrainted_type</span></a> <span class="id" title="var">t</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b2</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b2</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToAssignRangeCheck"><span class="id" title="constructor">ToAssignRangeCheck</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span> := <span class="id" title="var">t</span>) |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToAssign"><span class="id" title="constructor">ToAssign</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">t</span> := <span class="id" title="var">t</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="tactic">auto</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">solve</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toNameRTImpl_soundness"><span class="id" title="lemma">toNameRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;].<br/>
+&nbsp;&nbsp;- <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">c1</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b1</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">c2</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b2</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b1</span>, <span class="id" title="var">b2</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">c</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b1</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b1</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="symboltable.html#fetch_proc"><span class="id" title="definition">fetch_proc</span></a> <span class="id" title="var">p</span> <span class="id" title="var">st</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b1</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b1</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">t</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toArgsRTImpl"><span class="id" title="definition">toArgsRTImpl</span></a> <span class="id" title="var">st</span> (<a class="idref" href="ast.html#procedure_parameter_profile"><span class="id" title="definition">procedure_parameter_profile</span></a> <span class="id" title="var">p0</span>) <span class="id" title="var">l</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b2</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b2</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToCall"><span class="id" title="constructor">ToCall</span></a> <span class="id" title="keyword">with</span> (<span class="id" title="var">n0</span> := <span class="id" title="var">l0</span>) (<span class="id" title="var">pb</span> := <span class="id" title="var">p0</span>) (<span class="id" title="var">params</span> := (<a class="idref" href="ast.html#procedure_parameter_profile"><span class="id" title="definition">procedure_parameter_profile</span></a> <span class="id" title="var">p0</span>)); <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toArgsRTImpl_soundness"><span class="id" title="lemma">toArgsRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">c1</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b1</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">c2</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">b2</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">b1</span>, <span class="id" title="var">b2</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toTypeDeclRTImpl_soundness"><span class="id" title="lemma">toTypeDeclRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">t</span> <span class="id" title="var">t'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toTypeDeclRTImpl"><span class="id" title="definition">toTypeDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t'"><span class="id" title="variable">t'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toTypeDeclRT"><span class="id" title="inductive">toTypeDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t'"><span class="id" title="variable">t'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">t</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">destruct</span> <span class="id" title="var">r</span>); <span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toObjDeclRTImpl_soundness"><span class="id" title="lemma">toObjDeclRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">o</span> <span class="id" title="var">o'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toObjDeclRTImpl"><span class="id" title="definition">toObjDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o"><span class="id" title="variable">o</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o'"><span class="id" title="variable">o'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toObjDeclRT"><span class="id" title="inductive">toObjDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o"><span class="id" title="variable">o</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o'"><span class="id" title="variable">o'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">functional</span> <span class="id" title="tactic">induction</span> <a class="idref" href="rt_gen_impl.html#toObjDeclRTImpl"><span class="id" title="definition">toObjDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">o</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">constructor</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToObjDeclRangeCheck"><span class="id" title="constructor">ToObjDeclRangeCheck</span></a> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen.html#ToObjDecl"><span class="id" title="constructor">ToObjDecl</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="tactic">auto</span>; <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toObjDeclsRTImpl_soundness"><span class="id" title="lemma">toObjDeclsRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">lo</span> <span class="id" title="var">lo'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toObjDeclsRTImpl"><span class="id" title="definition">toObjDeclsRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo"><span class="id" title="variable">lo</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo'"><span class="id" title="variable">lo'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toObjDeclsRT"><span class="id" title="inductive">toObjDeclsRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo"><span class="id" title="variable">lo</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo'"><span class="id" title="variable">lo'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">lo</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toObjDeclRTImpl_soundness"><span class="id" title="lemma">toObjDeclRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toParamSpecRTImpl_soundness"><span class="id" title="lemma">toParamSpecRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">param</span> <span class="id" title="var">param'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toParamSpecRTImpl"><span class="id" title="definition">toParamSpecRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param"><span class="id" title="variable">param</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param'"><span class="id" title="variable">param'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toParamSpecRT"><span class="id" title="inductive">toParamSpecRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param"><span class="id" title="variable">param</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param'"><span class="id" title="variable">param'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">param</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toParamSpecsRTImpl_soundness"><span class="id" title="lemma">toParamSpecsRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">lparam</span> <span class="id" title="var">lparam'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toParamSpecsRTImpl"><span class="id" title="definition">toParamSpecsRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam"><span class="id" title="variable">lparam</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam'"><span class="id" title="variable">lparam'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toParamSpecsRT"><span class="id" title="inductive">toParamSpecsRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam"><span class="id" title="variable">lparam</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam'"><span class="id" title="variable">lparam'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">lparam</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toParamSpecRTImpl_soundness"><span class="id" title="lemma">toParamSpecRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Scheme</span> <a name="declaration_ind"><span class="id" title="definition">declaration_ind</span></a> := <span class="id" title="keyword">Induction</span> <span class="id" title="keyword">for</span> <a class="idref" href="ast.html#decl"><span class="id" title="inductive">decl</span></a> <span class="id" title="keyword">Sort</span> <span class="id" title="keyword">Prop</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">with</span> <a name="procedure_body_ind"><span class="id" title="definition">procedure_body_ind</span></a> := <span class="id" title="keyword">Induction</span> <span class="id" title="keyword">for</span> <a class="idref" href="ast.html#procBodyDecl"><span class="id" title="inductive">procBodyDecl</span></a> <span class="id" title="keyword">Sort</span> <span class="id" title="keyword">Prop</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab107"></a><h2 class="section">toDeclRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toDeclRTImpl_soundness"><span class="id" title="lemma">toDeclRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">d</span> <span class="id" title="var">d'</span> <span class="id" title="var">st</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> (<a class="idref" href="rt_gen_impl_consistent.html#declaration_ind"><span class="id" title="definition">declaration_ind</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">d</span>: <a class="idref" href="ast.html#decl"><span class="id" title="inductive">decl</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">d'</span> : <a class="idref" href="ast_rt.html#declRT"><span class="id" title="inductive">declRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">p</span>: <a class="idref" href="ast.html#procBodyDecl"><span class="id" title="inductive">procBodyDecl</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">p'</span>: <a class="idref" href="ast_rt.html#procBodyDeclRT"><span class="id" title="inductive">procBodyDeclRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">constructor</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toTypeDeclRTImpl_soundness"><span class="id" title="lemma">toTypeDeclRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">constructor</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toObjDeclRTImpl_soundness"><span class="id" title="lemma">toObjDeclRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">p</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">x</span>; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">d</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">x</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">d0</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">y</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>, <span class="id" title="var">y</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">procedure_declarative_part</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">x</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">procedure_statements</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">y</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>, <span class="id" title="var">y</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toParamSpecsRTImpl_soundness"><span class="id" title="lemma">toParamSpecsRTImpl_soundness</span></a> | |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toStmtRTImpl_soundness"><span class="id" title="lemma">toStmtRTImpl_soundness</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab108"></a><h2 class="section">toProcBodyDeclRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toProcBodyDeclRTImpl_soundness"><span class="id" title="lemma">toProcBodyDeclRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">p</span> <span class="id" title="var">p'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">p</span>; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">procedure_declarative_part</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">x</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">procedure_statements</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">y</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>, <span class="id" title="var">y</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toParamSpecsRTImpl_soundness"><span class="id" title="lemma">toParamSpecsRTImpl_soundness</span></a> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toDeclRTImpl_soundness"><span class="id" title="lemma">toDeclRTImpl_soundness</span></a> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toStmtRTImpl_soundness"><span class="id" title="lemma">toStmtRTImpl_soundness</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab109"></a><h2 class="section">toProgramRTImpl_soundness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toProgramRTImpl_soundness"><span class="id" title="lemma">toProgramRTImpl_soundness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">p</span> <span class="id" title="var">p'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProgramRTImpl"><span class="id" title="definition">toProgramRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProgramRT"><span class="id" title="inductive">toProgramRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">p</span>, <span class="id" title="var">p'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="rt_gen_impl.html#toProgramRTImpl"><span class="id" title="definition">toProgramRTImpl</span></a> <span class="id" title="keyword">in</span> <span class="id" title="var">H</span>; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">remember</span> (<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">decls</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">x</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H1</span>; <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toDeclRTImpl_soundness"><span class="id" title="lemma">toDeclRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="rt_gen_impl_consistent.html#Checks_Generator_Implementation_Soundness_Proof"><span class="id" title="section">Checks_Generator_Implementation_Soundness_Proof</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab110"></a><h1 class="section">Completeness of RT-GEN Implementation</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <a name="Checks_Generator_Implementation_Completeness_Proof"><span class="id" title="section">Checks_Generator_Implementation_Completeness_Proof</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab111"></a><h2 class="section">toExpRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toExpRTImpl_completeness"><span class="id" title="lemma">toExpRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">e</span> <span class="id" title="var">e'</span> <span class="id" title="var">st</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toExpRTImpl"><span class="id" title="definition">toExpRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> (<a class="idref" href="rt_gen_impl_consistent.html#expression_ind"><span class="id" title="definition">expression_ind</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">e</span>: <a class="idref" href="ast.html#exp"><span class="id" title="inductive">exp</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">e'</span> : <a class="idref" href="ast_rt.html#expRT"><span class="id" title="inductive">expRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a>   <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toExpRTImpl"><span class="id" title="definition">toExpRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">n</span>: <a class="idref" href="ast.html#name"><span class="id" title="inductive">name</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">n'</span>: <a class="idref" href="ast_rt.html#nameRT"><span class="id" title="inductive">nameRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a>   <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toNameRTImpl"><span class="id" title="definition">toNameRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a>  <span class="id" title="var">_</span> ?<span class="id" title="var">e</span> ?<span class="id" title="var">e'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">n</span> ?<span class="id" title="var">n'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">progress</span> <span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H1</span>:<span class="id" title="keyword">forall</span> (<span class="id" title="var">e'</span> : <a class="idref" href="ast_rt.html#expRT"><span class="id" title="inductive">expRT</span></a>) (<span class="id" title="var">st</span> : <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">e</span> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toExpRTImpl"><span class="id" title="definition">toExpRTImpl</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">e</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H2</span>:<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">e</span> ?<span class="id" title="var">e1RT</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H2</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H1</span>:<span class="id" title="keyword">forall</span> (<span class="id" title="var">n'</span> : <a class="idref" href="ast_rt.html#nameRT"><span class="id" title="inductive">nameRT</span></a>) (<span class="id" title="var">st</span> : <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">n</span> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toNameRTImpl"><span class="id" title="definition">toNameRTImpl</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">n</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H2</span>:<a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">n</span> ?<span class="id" title="var">nRT</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H2</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="values.html#in_bound"><span class="id" title="inductive">in_bound</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">idtac</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[ <span class="id" title="tactic">destruct</span> <span class="id" title="var">b</span> | <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">u</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;]; <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab112"></a><h2 class="section">toNameRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toNameRTImpl_completeness"><span class="id" title="lemma">toNameRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">n</span> <span class="id" title="var">n'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toNameRTImpl"><span class="id" title="definition">toNameRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#n'"><span class="id" title="variable">n'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> ?<span class="id" title="var">st</span> ?<span class="id" title="var">e</span> ?<span class="id" title="var">e'</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_completeness"><span class="id" title="lemma">toExpRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab113"></a><h2 class="section">toArgsRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toArgsRTImpl_completeness"><span class="id" title="lemma">toArgsRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">params</span> <span class="id" title="var">args</span> <span class="id" title="var">args'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toArgsRT"><span class="id" title="inductive">toArgsRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#params"><span class="id" title="variable">params</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args"><span class="id" title="variable">args</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args'"><span class="id" title="variable">args'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toArgsRTImpl"><span class="id" title="definition">toArgsRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#params"><span class="id" title="variable">params</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args"><span class="id" title="variable">args</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#args'"><span class="id" title="variable">args'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">params</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toArgsRT"><span class="id" title="inductive">toArgsRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> ?<span class="id" title="var">args</span> ?<span class="id" title="var">args'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H1</span>: <span class="id" title="keyword">forall</span> (<span class="id" title="var">args</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="ast.html#exp"><span class="id" title="inductive">exp</span></a>) (<span class="id" title="var">args'</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="ast_rt.html#expRT"><span class="id" title="inductive">expRT</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toArgsRT"><span class="id" title="inductive">toArgsRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">params</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toArgsRTImpl"><span class="id" title="definition">toArgsRTImpl</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">params</span> <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H2</span>: <a class="idref" href="rt_gen.html#toArgsRT"><span class="id" title="inductive">toArgsRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">params</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen_impl.html#toArgsRTImpl"><span class="id" title="definition">toArgsRTImpl</span></a> ?<span class="id" title="var">st</span> ?<span class="id" title="var">params</span> ?<span class="id" title="var">larg</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">simpl</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">e</span> ?<span class="id" title="var">e'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_completeness"><span class="id" title="lemma">toExpRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">n</span> ?<span class="id" title="var">n'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toNameRTImpl_completeness"><span class="id" title="lemma">toNameRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">idtac</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab114"></a><h2 class="section">toStmtRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toStmtRTImpl_completeness"><span class="id" title="lemma">toStmtRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">c</span> <span class="id" title="var">c'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c"><span class="id" title="variable">c</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c'"><span class="id" title="variable">c'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c"><span class="id" title="variable">c</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c'"><span class="id" title="variable">c'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">c</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">c</span> ?<span class="id" title="var">c'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">progress</span> <span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a>  <span class="id" title="var">_</span> ?<span class="id" title="var">e</span> ?<span class="id" title="var">e'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_completeness"><span class="id" title="lemma">toExpRTImpl_completeness</span></a>  <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toNameRT"><span class="id" title="inductive">toNameRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">n</span> ?<span class="id" title="var">n'</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toNameRTImpl_completeness"><span class="id" title="lemma">toNameRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H1</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">c'</span> : <a class="idref" href="ast_rt.html#stmtRT"><span class="id" title="inductive">stmtRT</span></a>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">c</span> <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">c</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H2</span>: <a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">c</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">_</span> <span class="id" title="var">H2</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toArgsRT"><span class="id" title="inductive">toArgsRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toArgsRTImpl_completeness"><span class="id" title="lemma">toArgsRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toTypeDeclRTImpl_completeness"><span class="id" title="lemma">toTypeDeclRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">t</span> <span class="id" title="var">t'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toTypeDeclRT"><span class="id" title="inductive">toTypeDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t'"><span class="id" title="variable">t'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toTypeDeclRTImpl"><span class="id" title="definition">toTypeDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#t'"><span class="id" title="variable">t'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">t</span>; <span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toTypeDeclRT"><span class="id" title="inductive">toTypeDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toObjDeclRTImpl_completeness"><span class="id" title="lemma">toObjDeclRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">o</span> <span class="id" title="var">o'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toObjDeclRT"><span class="id" title="inductive">toObjDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o"><span class="id" title="variable">o</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o'"><span class="id" title="variable">o'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toObjDeclRTImpl"><span class="id" title="definition">toObjDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o"><span class="id" title="variable">o</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#o'"><span class="id" title="variable">o'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">functional</span> <span class="id" title="tactic">induction</span> <a class="idref" href="rt_gen_impl.html#toObjDeclRTImpl"><span class="id" title="definition">toObjDeclRTImpl</span></a> <span class="id" title="var">st</span> <span class="id" title="var">o</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toObjDeclRT"><span class="id" title="inductive">toObjDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_completeness"><span class="id" title="lemma">toExpRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toObjDeclsRTImpl_completeness"><span class="id" title="lemma">toObjDeclsRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">lo</span> <span class="id" title="var">lo'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toObjDeclsRT"><span class="id" title="inductive">toObjDeclsRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo"><span class="id" title="variable">lo</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo'"><span class="id" title="variable">lo'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toObjDeclsRTImpl"><span class="id" title="definition">toObjDeclsRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo"><span class="id" title="variable">lo</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lo'"><span class="id" title="variable">lo'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">lo</span>; <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toObjDeclsRT"><span class="id" title="inductive">toObjDeclsRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toObjDeclRT"><span class="id" title="inductive">toObjDeclRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">o</span> ?<span class="id" title="var">o'</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toObjDeclRTImpl_completeness"><span class="id" title="lemma">toObjDeclRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHlo</span> <span class="id" title="var">_</span> <span class="id" title="var">H5</span>); <span class="id" title="var">smack</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toParamSpecRTImpl_completeness"><span class="id" title="lemma">toParamSpecRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">param</span> <span class="id" title="var">param'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toParamSpecRT"><span class="id" title="inductive">toParamSpecRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param"><span class="id" title="variable">param</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param'"><span class="id" title="variable">param'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toParamSpecRTImpl"><span class="id" title="definition">toParamSpecRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param"><span class="id" title="variable">param</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#param'"><span class="id" title="variable">param'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toParamSpecsRTImpl_completeness"><span class="id" title="lemma">toParamSpecsRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">lparam</span> <span class="id" title="var">lparam'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toParamSpecsRT"><span class="id" title="inductive">toParamSpecsRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam"><span class="id" title="variable">lparam</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam'"><span class="id" title="variable">lparam'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toParamSpecsRTImpl"><span class="id" title="definition">toParamSpecsRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam"><span class="id" title="variable">lparam</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#lparam'"><span class="id" title="variable">lparam'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">lparam</span>; <span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">auto</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHlparam</span> <span class="id" title="var">_</span> <span class="id" title="var">H4</span>);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toParamSpecRT"><span class="id" title="inductive">toParamSpecRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toParamSpecRTImpl_completeness"><span class="id" title="lemma">toParamSpecRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab115"></a><h2 class="section">toDeclRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toDeclRTImpl_completeness"><span class="id" title="lemma">toDeclRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">d</span> <span class="id" title="var">d'</span> <span class="id" title="var">st</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> (<a class="idref" href="rt_gen_impl_consistent.html#declaration_ind"><span class="id" title="definition">declaration_ind</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">d</span>: <a class="idref" href="ast.html#decl"><span class="id" title="inductive">decl</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">d'</span> : <a class="idref" href="ast_rt.html#declRT"><span class="id" title="inductive">declRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d"><span class="id" title="variable">d</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#d'"><span class="id" title="variable">d'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">p</span>: <a class="idref" href="ast.html#procBodyDecl"><span class="id" title="inductive">procBodyDecl</span></a> =&gt; <span class="id" title="keyword">forall</span> (<span class="id" title="var">p'</span>: <a class="idref" href="ast_rt.html#procBodyDeclRT"><span class="id" title="inductive">procBodyDeclRT</span></a>) (<span class="id" title="var">st</span>: <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); <span class="id" title="var">smack</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">progress</span> <span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toTypeDeclRT"><span class="id" title="inductive">toTypeDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toTypeDeclRTImpl_completeness"><span class="id" title="lemma">toTypeDeclRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toObjDeclRT"><span class="id" title="inductive">toObjDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toObjDeclRTImpl_completeness"><span class="id" title="lemma">toObjDeclRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toParamSpecsRT"><span class="id" title="inductive">toParamSpecsRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toParamSpecsRTImpl_completeness"><span class="id" title="lemma">toParamSpecsRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toStmtRTImpl_completeness"><span class="id" title="lemma">toStmtRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H1</span>: <span class="id" title="keyword">forall</span> (<span class="id" title="var">p'</span> : <a class="idref" href="ast_rt.html#procBodyDeclRT"><span class="id" title="inductive">procBodyDeclRT</span></a>) (<span class="id" title="var">st</span> : <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">p</span> <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">p</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H2</span>: <a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">p</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H2</span>); <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H1</span>: <span class="id" title="keyword">forall</span> (<span class="id" title="var">d'</span> : <a class="idref" href="ast_rt.html#declRT"><span class="id" title="inductive">declRT</span></a>) (<span class="id" title="var">st</span> : <a class="idref" href="symboltable.html#symTab"><span class="id" title="definition">symTab</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">d</span> <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toDeclRTImpl"><span class="id" title="definition">toDeclRTImpl</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">d</span> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H2</span>: <a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <span class="id" title="var">_</span> ?<span class="id" title="var">d</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<span class="id" title="var">H1</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H2</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H2</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab116"></a><h2 class="section">toProcBodyDeclRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toProcBodyDeclRTImpl_completeness"><span class="id" title="lemma">toProcBodyDeclRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">p</span> <span class="id" title="var">p'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">p</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;[<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">progress</span> <span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toParamSpecsRT"><span class="id" title="inductive">toParamSpecsRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toParamSpecsRTImpl_completeness"><span class="id" title="lemma">toParamSpecsRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toStmtRTImpl_completeness"><span class="id" title="lemma">toStmtRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| [<span class="id" title="var">H</span>: <a class="idref" href="rt_gen.html#toDeclRT"><span class="id" title="inductive">toDeclRT</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span>] =&gt; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toDeclRTImpl_completeness"><span class="id" title="lemma">toDeclRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span>); <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>; <span class="id" title="var">smack</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab117"></a><h2 class="section">toProgramRTImpl_completeness</h2>
+
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="toProgramRTImpl_completeness"><span class="id" title="lemma">toProgramRTImpl_completeness</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">p</span> <span class="id" title="var">p'</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProgramRT"><span class="id" title="inductive">toProgramRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProgramRTImpl"><span class="id" title="definition">toProgramRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">p</span>, <span class="id" title="var">p'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H3</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">specialize</span> (<a class="idref" href="rt_gen_impl_consistent.html#toDeclRTImpl_completeness"><span class="id" title="lemma">toDeclRTImpl_completeness</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H3</span>); <span class="id" title="tactic">intro</span> <span class="id" title="var">HZ</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="rt_gen_impl.html#toProgramRTImpl"><span class="id" title="definition">toProgramRTImpl</span></a>; <span class="id" title="tactic">simpl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">HZ</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="rt_gen_impl_consistent.html#Checks_Generator_Implementation_Completeness_Proof"><span class="id" title="section">Checks_Generator_Implementation_Completeness_Proof</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab118"></a><h1 class="section">Consistency of RT-GEN Impl and RT-GEN Spec</h1>
+
+<div class="paragraph"> </div>
+
+<a name="lab119"></a><h2 class="section">toExpRTImplConsistent</h2>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toExpRTImplConsistent"><span class="id" title="lemma">toExpRTImplConsistent</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">e</span> <span class="id" title="var">e'</span> <span class="id" title="var">st</span>,<br/>
+&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toExpRT"><span class="id" title="inductive">toExpRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toExpRTImpl"><span class="id" title="definition">toExpRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="rt_gen_impl_consistent.html#e'"><span class="id" title="variable">e'</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span>; <span class="id" title="tactic">split</span>; <span class="id" title="tactic">intro</span>;<br/>
+&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_completeness"><span class="id" title="lemma">toExpRTImpl_completeness</span></a>; <span class="id" title="tactic">auto</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toExpRTImpl_soundness"><span class="id" title="lemma">toExpRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span> <br/>
+&nbsp;&nbsp;].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab120"></a><h2 class="section">toStmtRTImplConsistent</h2>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toStmtRTImplConsistent"><span class="id" title="lemma">toStmtRTImplConsistent</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">c</span> <span class="id" title="var">c'</span>,<br/>
+&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toStmtRT"><span class="id" title="inductive">toStmtRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c"><span class="id" title="variable">c</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c'"><span class="id" title="variable">c'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toStmtRTImpl"><span class="id" title="definition">toStmtRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c"><span class="id" title="variable">c</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#c'"><span class="id" title="variable">c'</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span>; <span class="id" title="tactic">split</span>; <span class="id" title="tactic">intro</span>;<br/>
+&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toStmtRTImpl_completeness"><span class="id" title="lemma">toStmtRTImpl_completeness</span></a>; <span class="id" title="tactic">auto</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toStmtRTImpl_soundness"><span class="id" title="lemma">toStmtRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span> <br/>
+&nbsp;&nbsp;].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab121"></a><h2 class="section">toProcBodyDeclRTConsistent</h2>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toProcBodyDeclRTConsistent"><span class="id" title="lemma">toProcBodyDeclRTConsistent</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">p</span> <span class="id" title="var">p'</span>,<br/>
+&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProcBodyDeclRT"><span class="id" title="inductive">toProcBodyDeclRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProcBodyDeclRTImpl"><span class="id" title="definition">toProcBodyDeclRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span>; <span class="id" title="tactic">split</span>; <span class="id" title="tactic">intro</span>;<br/>
+&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toProcBodyDeclRTImpl_completeness"><span class="id" title="lemma">toProcBodyDeclRTImpl_completeness</span></a>; <span class="id" title="tactic">auto</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toProcBodyDeclRTImpl_soundness"><span class="id" title="lemma">toProcBodyDeclRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span> <br/>
+&nbsp;&nbsp;].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab122"></a><h2 class="section">toProgramRTImplConsistent</h2>
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toProgramRTImplConsistent"><span class="id" title="lemma">toProgramRTImplConsistent</span></a>: <span class="id" title="keyword">forall</span> <span class="id" title="var">st</span> <span class="id" title="var">p</span> <span class="id" title="var">p'</span>,<br/>
+&nbsp;&nbsp;<a class="idref" href="rt_gen.html#toProgramRT"><span class="id" title="inductive">toProgramRT</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="rt_gen_impl.html#toProgramRTImpl"><span class="id" title="definition">toProgramRTImpl</span></a> <a class="idref" href="rt_gen_impl_consistent.html#st"><span class="id" title="variable">st</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.5/stdlib/Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <a class="idref" href="rt_gen_impl_consistent.html#p'"><span class="id" title="variable">p'</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span>; <span class="id" title="tactic">split</span>; <span class="id" title="tactic">intro</span>;<br/>
+&nbsp;&nbsp;[ <span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toProgramRTImpl_completeness"><span class="id" title="lemma">toProgramRTImpl_completeness</span></a>; <span class="id" title="tactic">auto</span> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="rt_gen_impl_consistent.html#toProgramRTImpl_soundness"><span class="id" title="lemma">toProgramRTImpl_soundness</span></a>; <span class="id" title="tactic">auto</span> <br/>
+&nbsp;&nbsp;].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
